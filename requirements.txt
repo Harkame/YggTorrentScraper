@@ -1,0 +1,7 @@
+BeautifulSoup4
+pyyaml
+lxml
+tqdm
+requests
+requests_toolbelt
+#cloudscraper
