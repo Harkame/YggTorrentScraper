@@ -1,11 +1,17 @@
+
+from __future__ import absolute_import, division
+
 import datetime
-import logging
-import re
-import os
 import errno
+import logging
+import os
+import re
+
 import requests
 from bs4 import BeautifulSoup
 from requests_toolbelt.multipart.encoder import MultipartEncoder
+
+__all__ = ['YggTorrentScraper']
 
 YGGTORRENT_TLD = 'ch'
 
@@ -139,7 +145,7 @@ class YggTorrentScraper:
 
         download_button = torrent_page.find('a', {'class': 'butt'})
 
-        if 'href' in download_button or download_button['href']:
+        if 'href' in download_button:
             torrent.url = download_button['href']
 
         torrent.seeders = int(connection_tags[0].text.replace(' ', ''))

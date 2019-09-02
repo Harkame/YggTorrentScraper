@@ -14,7 +14,7 @@ logger = logging.getLogger('yggtorrentscraper')
 def main(arguments):
     yggtorrentscraper = YggTorrentScraper(requests.session())
 
-    yggtorrentscraper.login()
+    yggtorrentscraper.login(identifiant='i', password='p')
 
     most_completed = yggtorrentscraper.most_completed()
 
