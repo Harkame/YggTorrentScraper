@@ -6,7 +6,7 @@ with open('README.rst', 'r') as fh:
 
 setup(
     name='yggtorrentscraper',
-    version='0.0.6',
+    version='1.0.1',
     author='Harkame',
     description='Scraper for YggTorrent',
     long_description=long_description,

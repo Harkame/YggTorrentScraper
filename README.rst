@@ -8,7 +8,11 @@ Installation
 
 .. code:: bash
 
-   pip install -r requirements.txt
+   pip install yggtorrentscraper
+
+   OR
+
+   python setup.py install
 
 Dependencies
 ~~~~~~~~~~~~
@@ -24,96 +28,24 @@ Dependencies
 Usage
 -----
 
-Run
-~~~
+..code:: python
 
-.. code:: bash
+  import requests
+  from yggtorrentscraper import YggTorrentScraper
 
-   python yggtorrentdownloader/main.py -i myidentifiant -p mypassword
+  yggtorrentscraper = YggTorrentScraper(requests.session())
 
-Options
-~~~~~~~
+  yggtorrentscraper.login(identifiant='myidentifiant', password='mypassword')
 
-.. code:: bash
+  most_completed = yggtorrentscraper.most_completed()
 
-  usage: main.py [-h] [-c CONFIG_FILE] [-d DESTINATION_PATH] [-T TLD] [-v] -i IDENTIFIANT -p PASSWORD
+  torrent = yggtorrentscraper.extract_details(most_completed[0])
 
-  Script to download torrents from YggTorrent
+  print(torrent.__str__(files=False, comments=False))
 
-  optional arguments:
-    -h, --help            show this help message and exit
-    -c CONFIG_FILE, --config_file CONFIG_FILE
-                          Set config file
-                          Example : python yggtorrentscraper/main.py -c /home/myconfigfile.yml
-    -d DESTINATION_PATH, --destination_path DESTINATION_PATH
-                          Set destination path of downloaded torrents
-                          Example : python yggtorrentscraper/main.py -d /home/torrents/
-    -T TLD, --tld TLD     Set yggtorrent TLD manualy (because yggtorrent change often)
-                          Example : python yggtorrentscraper/main.py -T ch
-    -v, --verbose         Active verbose mode, support different level
-                          Example : python yggtorrentscraper/main.py -vv
-    -i IDENTIFIANT, --identifiant IDENTIFIANT
-                          YggTorrent account identifiant
-                          Example : python yggtorrentscraper/main.py -i myidentifiant
-    -p PASSWORD, --password PASSWORD
-                          YggTorrent account password
-                          Example : python yggtorrentscraper/main.py -p mypassword
+  yggtorrentscraper.download_from_torrent(torrent=torrent, destination_path='./')
 
-How it work
-~~~~~~~~~~~
-
-This program use an config file (default : ./config.yml)
-
-This file contains list of torrent to download, destination path, etc.
-
-Example of config file
-^^^^^^^^^^^^^^^^^^^^^^
-
-.. code:: yaml
-
-   list_research:
-     - research:
-       name:
-         The.Walking.Dead.S09
-       limit:
-         5
-
-     - research:
-       name:
-         test
-       files:
-         - avi
-         - mkv
-       uploaders:
-         - uploader1
-         - uploader2
-       descriptions:
-           - description1
-           - description2
-       sort: #name|publish_date|size|completed|seed|leech
-         size
-       order: #asc|desc
-         desc
-       limit:
-         1
-
-   destination_path:
-     ./torrents
-
-Download torrents
-~~~~~~~~~~~~~~~~~
-
-TODO
-~~~~~~~
-
-- Fix encoding
-
-- Special research (top 100, etc)
-
-Add an entry research to attribute list_research
-
-All sub-attributes are optionnal, but i reccomend to keep
-sub-attribute limit
+  yggtorrentscraper.logout()
 
 .. _Beautiful Soup 4: https://www.crummy.com/software/BeautifulSoup/bs4/doc/
 .. _PyYAML: https://github.com/yml/pyyml
