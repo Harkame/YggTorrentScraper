@@ -4,4 +4,3 @@ lxml
 tqdm
 requests
 requests_toolbelt
-#cloudscraper
