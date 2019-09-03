@@ -1,16 +1,17 @@
 import yggtorrentscraper
 from setuptools import find_packages, setup
 
-with open('README.rst', 'r') as fh:
+with open('README.md', 'r') as fh:
     long_description = fh.read()
 
 setup(
     name='yggtorrentscraper',
-    version='1.0.1',
+    version='1.0.2',
     author='Harkame',
     description='Scraper for YggTorrent',
     long_description=long_description,
-    long_description_content_type='text/x-rst',
+    # long_description_content_type='text/x-rst',
+    long_description_content_type='text/markdown',
     url='https://github.com/Harkame/YggTorrentDownloader',
     classifiers=[
         "Programming Language :: Python",
