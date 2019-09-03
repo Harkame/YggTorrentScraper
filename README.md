@@ -37,7 +37,7 @@ Soup 4](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
 import requests
 from yggtorrentscraper import YggTorrentScraper
 
-yggtorrentscraper = YggTorrentScraper(requests.session())
+scraper = YggTorrentScraper(requests.session())
 
 ```
 
