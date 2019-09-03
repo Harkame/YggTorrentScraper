@@ -28,7 +28,7 @@ Dependencies
 Usage
 -----
 
-..code:: python
+..code-block:: python
 
   import requests
   from yggtorrentscraper import YggTorrentScraper
