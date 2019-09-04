@@ -24,33 +24,33 @@ logger = logging.getLogger('yggtorrentscraper')
 
 YGGTORRENT_DOMAIN = '.yggtorrent.gg'
 YGGTORRENT_TOKEN_COOKIE = 'ygg_'
-YGGTORRENT_RESEARCH_URL_DESCRIPTION = '&description='
-YGGTORRENT_RESEARCH_URL_FILE = '&file='
-YGGTORRENT_RESEARCH_URL_UPLOADER = '&uploader='
-YGGTORRENT_RESEARCH_URL_CATEGORY = '&category='
-YGGTORRENT_RESEARCH_URL_SUB_CATEGORY = '&sub_category='
-YGGTORRENT_RESEARCH_URL_ORDER = '&order='
-YGGTORRENT_RESEARCH_URL_SORT = '&sort='
-YGGTORRENT_RESEARCH_URL_DO = '&do='
-YGGTORRENT_RESEARCH_URL_PAGE = '&page='
+YGGTORRENT_SEARCH_URL_DESCRIPTION = '&description='
+YGGTORRENT_SEARCH_URL_FILE = '&file='
+YGGTORRENT_SEARCH_URL_UPLOADER = '&uploader='
+YGGTORRENT_SEARCH_URL_CATEGORY = '&category='
+YGGTORRENT_SEARCH_URL_SUB_CATEGORY = '&sub_category='
+YGGTORRENT_SEARCH_URL_ORDER = '&order='
+YGGTORRENT_SEARCH_URL_SORT = '&sort='
+YGGTORRENT_SEARCH_URL_DO = '&do='
+YGGTORRENT_SEARCH_URL_PAGE = '&page='
 
-YGGTORRENT_RESEARCH_URL_DESCRIPTION = '&description='
-YGGTORRENT_RESEARCH_URL_FILE = '&file='
-YGGTORRENT_RESEARCH_URL_UPLOADER = '&uploader='
-YGGTORRENT_RESEARCH_URL_CATEGORY = '&category='
-YGGTORRENT_RESEARCH_URL_SUB_CATEGORY = '&sub_category='
-YGGTORRENT_RESEARCH_URL_ORDER = '&order='
-YGGTORRENT_RESEARCH_URL_SORT = '&sort='
-YGGTORRENT_RESEARCH_URL_DO = '&do='
-YGGTORRENT_RESEARCH_URL_PAGE = '&page='
+YGGTORRENT_SEARCH_URL_DESCRIPTION = '&description='
+YGGTORRENT_SEARCH_URL_FILE = '&file='
+YGGTORRENT_SEARCH_URL_UPLOADER = '&uploader='
+YGGTORRENT_SEARCH_URL_CATEGORY = '&category='
+YGGTORRENT_SEARCH_URL_SUB_CATEGORY = '&sub_category='
+YGGTORRENT_SEARCH_URL_ORDER = '&order='
+YGGTORRENT_SEARCH_URL_SORT = '&sort='
+YGGTORRENT_SEARCH_URL_DO = '&do='
+YGGTORRENT_SEARCH_URL_PAGE = '&page='
 
 YGGTORRENT_BASE_URL = f'https://www2.yggtorrent.{YGGTORRENT_TLD}'
 
-YGGTORRENT_RESEARCH_URL = f'{YGGTORRENT_BASE_URL}/engine/search?name='
+YGGTORRENT_SEARCH_URL = f'{YGGTORRENT_BASE_URL}/engine/search?name='
 YGGTORRENT_GET_FILES = f'{YGGTORRENT_BASE_URL}/engine/get_files?torrent='
 YGGTORRENT_GET_INFO = f'https://www2.yggtorrentchg/engine/get_nfo?torrent='
 
-YGGTORRENT_RESEARCH_URL = f'${YGGTORRENT_BASE_URL}/engine/search?name='
+YGGTORRENT_SEARCH_URL = f'{YGGTORRENT_BASE_URL}/engine/search?name='
 YGGTORRENT_MOST_COMPLETED_URL = f'{YGGTORRENT_BASE_URL}/engine/mostcompleted'
 
 TORRENT_PER_PAGE = 50
@@ -113,15 +113,15 @@ class YggTorrentScraper:
             logger.debug('Login successful')
         else:
             logger.debug('Logout failed')
-    '''
-    def research_torrent(self, name='', category='', sub_category='', descriptions={}, files={}, uploaders={}, sort='', order=''):
 
-        research_url = create_research_url(research)
+    def search(self, name=None, category=None, sub_category=None, descriptions=None, files=None, uploaders=None, sort='publish_date', order='asc'):
 
-        torrents_url = get_torrents_url(scraper, research_url, research)
+        search_url = self.create_search_url(name=name, category=category, sub_category=sub_category, descriptions=descriptions, files=files, uploaders=uploaders, sort=sort, order=order)
+
+        torrents_url = self.get_torrents_url(search_url=search_url, name=name, category=category, sub_category=sub_category,
+                                             descriptions=descriptions, files=files, uploaders=uploaders, sort=sort, order=order)
 
         return torrents_url
-    '''
 
     def extract_details(self, torrent_url):
         """
@@ -222,17 +222,17 @@ class YggTorrentScraper:
             torrents_url.append(a_tag['href'])
 
         return torrents_url
-    '''
-    def get_torrents_url(self, url, research):
+
+    def get_torrents_url(self, search_url='', name=None, category=None, sub_category=None, descriptions=None, files=None, uploaders=None, sort='date', order='asc', page=0, do='search'):
         """
         Return
         """
 
-        response = scraper.get(url)
+        response = self.session.get(search_url)
 
-        research_page = BeautifulSoup(response.content, features='lxml')
+        search_page = BeautifulSoup(response.content, features='lxml')
 
-        pagination = research_page.find('ul', {'class': 'pagination'})
+        pagination = search_page.find('ul', {'class': 'pagination'})
 
         if pagination is None:
             limit_page = 1
@@ -244,85 +244,77 @@ class YggTorrentScraper:
         torrents = []
 
         for page in range(0, limit_page):
-            research_url = create_research_url(
-                research, page=page * TORRENT_PER_PAGE)
+            search_url = self.create_search_url(name=name, category=category, sub_category=sub_category, descriptions=descriptions,
+                                                files=files, uploaders=uploaders, sort=sort, order=order, page=page * TORRENT_PER_PAGE)
 
-            response = scraper.get(research_url)
+            response = self.session.get(search_url)
 
-            research_page = BeautifulSoup(response.content, features='lxml')
+            search_page = BeautifulSoup(response.content, features='lxml')
 
-            torrents_tag = research_page.findAll('a', {'id': 'torrent_name'})
+            torrents_tag = search_page.findAll('a', {'id': 'torrent_name'})
 
             for torrent_tag in torrents_tag:
                 torrents.append(torrent_tag['href'])
-
-                if 'limit' in research:
-                    if len(torrents) == int(research['limit']):
-                        break
             else:
                 continue
 
             break
 
         return torrents
-    '''
-    # def create_research_url(researt, page=0, do='search'):
 
-    def create_research_url(research, page=0, do='search'):
+    def create_search_url(self, name=None, category=None, sub_category=None, descriptions=None, files=None, uploaders=None, sort='publish_date', order='asc', page=0, do='search'):
         """
-        Return a formated URL for torrent's research
+        Return a formated URL for torrent's search
         """
 
-        formated_research_url = YGGTORRENT_RESEARCH_URL
+        formated_search_url = YGGTORRENT_SEARCH_URL
 
-        if 'name' in research:
-            formated_research_url += research['name']
+        if name is not None:
+            formated_search_url += name
 
-        if 'category' in research:
-            formated_research_url += YGGTORRENT_RESEARCH_URL_CATEGORY
-            formated_research_url += research['category']
+        if category is not None:
+            formated_search_url += YGGTORRENT_SEARCH_URL_CATEGORY
+            formated_search_url += category
 
-        if 'sub_category' in research:
-            formated_research_url += YGGTORRENT_RESEARCH_URL_SUB_CATEGORY
-            formated_research_url += research['sub_category']
+        if sub_category is not None:
+            formated_search_url += YGGTORRENT_SEARCH_URL_SUB_CATEGORY
+            formated_search_url += sub_category
 
         if page > 0:
-            formated_research_url += YGGTORRENT_RESEARCH_URL_PAGE
-            formated_research_url += str(page)
+            formated_search_url += YGGTORRENT_SEARCH_URL_PAGE
+            formated_search_url += str(page)
 
-        if 'descriptions' in research:
-            formated_research_url += YGGTORRENT_RESEARCH_URL_DESCRIPTION
+        if descriptions is not None:
+            formated_search_url += YGGTORRENT_SEARCH_URL_DESCRIPTION
 
-            for description in research['descriptions']:
-                formated_research_url += description
-                formated_research_url += '+'
+            for description in descriptions:
+                formated_search_url += description
+                formated_search_url += '+'
 
-        if 'files' in research:
-            formated_research_url += YGGTORRENT_RESEARCH_URL_FILE
+        if files is not None:
+            formated_search_url += YGGTORRENT_SEARCH_URL_FILE
 
-            for file in research['files']:
-                formated_research_url += file
-                formated_research_url += '+'
+            for file in files:
+                formated_search_url += file
+                formated_search_url += '+'
 
-        if 'uploaders' in research:
-            formated_research_url += YGGTORRENT_RESEARCH_URL_UPLOADER
+        if uploaders is not None:
+            formated_search_url += YGGTORRENT_SEARCH_URL_UPLOADER
 
-            for uploader in research['uploaders']:
-                formated_research_url += uploader
-                formated_research_url += '+'
+            for uploader in uploaders:
+                formated_search_url += uploader
+                formated_search_url += '+'
 
-        if 'sort' in research:
-            formated_research_url += YGGTORRENT_RESEARCH_URL_SORT
-            formated_research_url += research['sort']
+        formated_search_url += YGGTORRENT_SEARCH_URL_SORT
+        formated_search_url += sort
 
-        if 'order' in research:
-            formated_research_url += YGGTORRENT_RESEARCH_URL_ORDER
-            formated_research_url += research['order']
+        formated_search_url += YGGTORRENT_SEARCH_URL_ORDER
+        formated_search_url += order
 
-        formated_research_url += YGGTORRENT_RESEARCH_URL_DO
-        formated_research_url += do
+        formated_search_url += YGGTORRENT_SEARCH_URL_DO
+        formated_search_url += do
 
-        return formated_research_url
+        return formated_search_url
 
     def download_from_torrent(self, torrent=None, destination_path='./'):
         if torrent is not None:

@@ -10,8 +10,8 @@ sys.path.insert(0, my_path + '/../yggtorrentdownloader/')
 sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
 
 
-class TestMostCompleted(unittest.TestCase):
+class TestResearch(unittest.TestCase):
     scraper = YggTorrentScraper(requests.session())
 
-    def test_most_completed(self):
+    def test_research(self):
         pass

@@ -1,13 +1,12 @@
-from setuptools import find_packages, setup
-
 import yggtorrentscraper
+from setuptools import find_packages, setup
 
 with open('README.md', 'r') as fh:
     long_description = fh.read()
 
 setup(
     name='yggtorrentscraper',
-    version='1.0.4',
+    version='1.0.5',
     author='Harkame',
     description='Scraper for YggTorrent',
     long_description=long_description,
