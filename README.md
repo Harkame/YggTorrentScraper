@@ -197,6 +197,6 @@ tox
 
 ``` bash
 
-pytest tests/ --cov=japscandownloader --cov-report=
+pytest tests/ --cov=yggtorrentscraper --cov-report=xml
 
 ```
