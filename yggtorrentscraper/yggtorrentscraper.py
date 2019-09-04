@@ -255,10 +255,6 @@ class YggTorrentScraper:
 
             for torrent_tag in torrents_tag:
                 torrents.append(torrent_tag['href'])
-            else:
-                continue
-
-            break
 
         return torrents
 
