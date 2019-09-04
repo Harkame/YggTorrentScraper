@@ -1,5 +1,6 @@
 # YggTorrentScraper
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/2d860dc88dfa467eb07105f559ba352a)](https://www.codacy.com/app/Harkame/YggTorrentScraper?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Harkame/YggTorrentScraper&amp;utm_campaign=Badge_Grade)
 [![Build Status](https://travis-ci.org/Harkame/YggTorrentScraper.svg?branch=master)](https://travis-ci.org/Harkame/YggTorrentScraper)
 
 ## Installation
