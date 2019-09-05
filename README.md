@@ -24,10 +24,9 @@ python setup.py install
 
 ### Dependencies
 
-- [Beautiful
-Soup 4](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
-- [PyYAML](https://github.com/yml/pyyml)
-- [lxml](https://github.com/lxml/lxml.git)
+-  [BeautifulSoup 4](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
+-  [PyYAML](https://github.com/yml/pyyml)
+-  [lxml](https://github.com/lxml/lxml.git)
 
 ## Usage
 
@@ -181,7 +180,6 @@ scraper.download_from_torrent_url('https://www2.yggtorrent.ch/torrent/filmvideo/
 scraper.logout()
 
 ```
-
 
 ## Test
 
