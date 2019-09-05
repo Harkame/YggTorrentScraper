@@ -1,7 +1,7 @@
 import unittest
 
 import requests
-from yggtorrentscraper import YggTorrentScraper
+from ..yggtorrentscraper import YggTorrentScraper
 
 
 class TestDownload(unittest.TestCase):
