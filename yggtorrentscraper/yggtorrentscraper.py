@@ -9,7 +9,6 @@ import re
 
 import requests
 from bs4 import BeautifulSoup
-from requests_toolbelt.multipart.encoder import MultipartEncoder
 
 __all__ = ['YggTorrentScraper', 'YGGTORRENT_TLD']
 
