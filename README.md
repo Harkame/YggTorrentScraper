@@ -49,8 +49,7 @@ Requiered only for download torrent's file
 
 ``` python
 
-scraper.login(identifiant='myidentifiant',
-password='mypassword')
+scraper.login(identifiant='myidentifiant', password='mypassword')
 
 ```
 
@@ -91,6 +90,7 @@ https://www2.yggtorrent.ch/torrent/application/windows/316475-microsoft-toolkit-
 https://www2.yggtorrent.ch/torrent/filmvideo/animation/431851-asterix-le-secret-de-la-potion-magique-2018-french-1080p-hdlight-x264-ac3-toxic
 https://www2.yggtorrent.ch/torrent/application/windows/330032-windows-microsoft-office-2019-build-10730-20102-activation-francais
 https://www2.yggtorrent.ch/torrent/filmvideo/serie-tv/436928-game-of-thrones-s08e01-multi-1080p-amzn-web-dl-dd5-1-h264-ark01
+
 ...
 
 '''
