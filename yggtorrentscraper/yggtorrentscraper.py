@@ -98,8 +98,12 @@ class YggTorrentScraper:
                 domain=YGGTORRENT_DOMAIN, name=YGGTORRENT_TOKEN_COOKIE, value=yggtorrent_token)
 
             self.session.cookies.set_cookie(cookie)
+
+            return True
         else:
             logger.debug('Login failed')
+
+            return False
 
     def logout(self):
         """

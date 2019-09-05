@@ -1,11 +1,12 @@
+
 import unittest
 
 import requests
 from yggtorrentscraper import YggTorrentScraper
 
 
-class TestDownload(unittest.TestCase):
+class TestResearch(unittest.TestCase):
     scraper = YggTorrentScraper(requests.session())
 
-    def test_download(self):
+    def test_research(self):
         pass

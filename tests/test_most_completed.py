@@ -1,17 +1,13 @@
-import os
-import sys
 import unittest
 
 import requests
 from yggtorrentscraper import YggTorrentScraper
 
-my_path = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, my_path + '/../yggtorrentdownloader/')
-sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
-
 
 class TestMostCompleted(unittest.TestCase):
-    scraper = YggTorrentScraper(requests.session())
+    scraper = YggTorrentScraper(session=requests.session())
 
     def test_most_completed(self):
-        pass
+        most_completed = self.scraper.most_completed()
+
+        self.assertEqual(len(most_completed), 100)

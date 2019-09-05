@@ -2,6 +2,7 @@
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/2d860dc88dfa467eb07105f559ba352a)](https://www.codacy.com/app/Harkame/YggTorrentScraper?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Harkame/YggTorrentScraper&amp;utm_campaign=Badge_Grade)
 [![Build Status](https://travis-ci.org/Harkame/YggTorrentScraper.svg?branch=master)](https://travis-ci.org/Harkame/YggTorrentScraper)
+[![codecov](https://codecov.io/gh/Harkame/YggTorrentScraper/branch/master/graph/badge.svg)](https://codecov.io/gh/Harkame/YggTorrentScraper)
 
 ## Installation
 
@@ -27,7 +28,6 @@ python setup.py install
 Soup 4](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
 - [PyYAML](https://github.com/yml/pyyml)
 - [lxml](https://github.com/lxml/lxml.git)
-- [Requests](https://github.com/kennethreitz/requests)
 
 ## Usage
 
