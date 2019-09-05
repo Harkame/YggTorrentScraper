@@ -25,7 +25,6 @@ python setup.py install
 ### Dependencies
 
 -  [BeautifulSoup 4](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
--  [PyYAML](https://github.com/yml/pyyml)
 -  [lxml](https://github.com/lxml/lxml.git)
 
 ## Usage
