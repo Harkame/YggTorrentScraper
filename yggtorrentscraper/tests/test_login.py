@@ -11,15 +11,14 @@ class TestLogout(unittest.TestCase):
         self.scraper = YggTorrentScraper(requests.session())
 
     def test_logout_success(self):
-        yggtorrent_identifiant = os.environ.get('YGGTORRENT_IDENTIFIANT')
-        yggtorrent_password = os.environ.get('YGGTORRENT_PASSWORD')
+        yggtorrent_identifiant = os.environ.get("YGGTORRENT_IDENTIFIANT")
+        yggtorrent_password = os.environ.get("YGGTORRENT_PASSWORD")
 
-        self.scraper.login(
-            yggtorrent_identifiant, yggtorrent_password)
+        self.scraper.login(yggtorrent_identifiant, yggtorrent_password)
 
         self.assertTrue(self.scraper.logout())
 
     def test_logout_failed(self):
-        self.scraper.login('myidentifiant', 'mypassword')
+        self.scraper.login("myidentifiant", "mypassword")
 
         self.assertFalse(self.scraper.logout())

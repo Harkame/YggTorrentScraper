@@ -13,15 +13,16 @@ class TestDownload(unittest.TestCase):
 
     def __init__(self, *args, **kwargs):
         super(TestDownload, self).__init__(*args, **kwargs)
-        yggtorrent_identifiant = os.environ.get('YGGTORRENT_IDENTIFIANT')
-        yggtorrent_password = os.environ.get('YGGTORRENT_PASSWORD')
+        yggtorrent_identifiant = os.environ.get("YGGTORRENT_IDENTIFIANT")
+        yggtorrent_password = os.environ.get("YGGTORRENT_PASSWORD")
 
-        self.destination_path = os.path.join('.', 'yggtorrentscraper', 'tests', 'test_download')
+        self.destination_path = os.path.join(
+            ".", "yggtorrentscraper", "tests", "test_download"
+        )
 
         self.scraper = YggTorrentScraper(requests.session())
 
-        self.scraper.login(
-            yggtorrent_identifiant, yggtorrent_password)
+        self.scraper.login(yggtorrent_identifiant, yggtorrent_password)
 
     def setUp(self):
         if not os.path.exists(self.destination_path):
