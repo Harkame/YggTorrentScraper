@@ -190,11 +190,3 @@ pip install tox
 tox
 
 ```
-
-### Generate cover report
-
-``` bash
-
-pytest tests/ --cov=yggtorrentscraper --cov-report=xml
-
-```
