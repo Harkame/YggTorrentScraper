@@ -1,11 +1,14 @@
-import unittest
 import os
+import unittest
+
 import requests
+
 from ..yggtorrentscraper import YggTorrentScraper
 
 
-class TestConnection(unittest.TestCase):
-    scraper = YggTorrentScraper(requests.session())
+class TestAuthentification(unittest.TestCase):
+    def setUp(self):
+        self.scraper = YggTorrentScraper(requests.session())
 
     def test_login_success(self):
         yggtorrent_identifiant = os.environ.get('YGGTORRENT_IDENTIFIANT')
@@ -23,6 +26,3 @@ class TestConnection(unittest.TestCase):
         is_authentified = self.scraper.login('myidentifiant', 'mypassword')
 
         self.assertFalse(is_authentified)
-
-    def test_logout(self):
-        self.scraper.logout()

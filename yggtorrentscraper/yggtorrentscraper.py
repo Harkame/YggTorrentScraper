@@ -114,9 +114,13 @@ class YggTorrentScraper:
         logger.debug('status_code : %s', response.status_code)
 
         if response.status_code == 200:
-            logger.debug('Login successful')
+            logger.debug('Logout successful')
+
+            return True
         else:
             logger.debug('Logout failed')
+
+            return False
 
     def search(self, name=None, category=None, sub_category=None, descriptions=None, files=None, uploaders=None, sort='publish_date', order='asc'):
 
@@ -149,7 +153,7 @@ class YggTorrentScraper:
 
         download_button = torrent_page.find('a', {'class': 'butt'})
 
-        if 'href' in download_button:
+        if download_button.has_attr('href'):
             torrent.url = download_button['href']
 
         torrent.seeders = int(connection_tags[0].text.replace(' ', ''))
@@ -428,10 +432,6 @@ class Torrent:
 
         return to_string
 
-    @staticmethod
-    def from_url(self, url):
-        pass
-
 
 class TorrentFile:
 
@@ -482,3 +482,24 @@ class TorrentComment:
         to_string += os.linesep
 
         return to_string
+
+
+def main():
+    session = requests.session()
+
+    scraper = YggTorrentScraper(session=session)
+
+    yggtorrent_identifiant = os.environ.get('YGGTORRENT_IDENTIFIANT')
+    yggtorrent_password = os.environ.get('YGGTORRENT_PASSWORD')
+
+    print(scraper.login(yggtorrent_identifiant, yggtorrent_password))
+
+    most_completed = scraper.most_completed()
+
+    torrent = scraper.extract_details(most_completed[0])
+
+    print(torrent.__str__())
+
+
+if __name__ == '__main__':
+    main()
