@@ -482,24 +482,3 @@ class TorrentComment:
         to_string += os.linesep
 
         return to_string
-
-
-def main():
-    session = requests.session()
-
-    scraper = YggTorrentScraper(session=session)
-
-    yggtorrent_identifiant = os.environ.get('YGGTORRENT_IDENTIFIANT')
-    yggtorrent_password = os.environ.get('YGGTORRENT_PASSWORD')
-
-    print(scraper.login(yggtorrent_identifiant, yggtorrent_password))
-
-    most_completed = scraper.most_completed()
-
-    torrent = scraper.extract_details(most_completed[0])
-
-    print(torrent.__str__())
-
-
-if __name__ == '__main__':
-    main()
