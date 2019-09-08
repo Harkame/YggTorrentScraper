@@ -66,7 +66,8 @@ class YggTorrentScraper:
         Login request with the specified identifiant and password, return an yggtorrent_token, necessary to download
         """
 
-        multipart_data = MultipartEncoder(fields={"id": identifiant, "pass": password})
+        multipart_data = MultipartEncoder(
+            fields={"id": identifiant, "pass": password})
 
         self.session.cookies.clear()
 
@@ -82,7 +83,8 @@ class YggTorrentScraper:
 
         if response.status_code == 200:
             logger.debug("Login successful")
-            yggtorrent_token = response.cookies.get_dict()[YGGTORRENT_TOKEN_COOKIE]
+            yggtorrent_token = response.cookies.get_dict()[
+                YGGTORRENT_TOKEN_COOKIE]
 
             cookie = requests.cookies.create_cookie(
                 domain=YGGTORRENT_DOMAIN,
@@ -408,19 +410,14 @@ class YggTorrentScraper:
 
         response = self.session.get(YGGTORRENT_BASE_URL + torrent_url)
 
-        temp_filename = response.headers.get("content-disposition")
+        temp_file_name = response.headers.get("content-disposition")
 
-        filename = temp_filename[temp_filename.index("filename=") + 10 : -1]
+        file_name = temp_file_name[temp_file_name.index("filename=") + 10: -1]
 
-        file_full_path = os.path.join(destination_path, filename)
+        if not os.path.exists(destination_path):
+            os.makedirs(destination_path)
 
-        if not os.path.exists(os.path.dirname(destination_path)):
-            try:
-                os.makedirs(os.path.dirname(destination_path))
-                logger.debug("File created : %s", destination_path)
-            except OSError as exc:
-                if exc.errno != errno.EEXIST:
-                    raise
+        file_full_path = os.path.join(destination_path, file_name)
 
         file = open(file_full_path, "wb")
 
