@@ -66,8 +66,7 @@ class YggTorrentScraper:
         Login request with the specified identifiant and password, return an yggtorrent_token, necessary to download
         """
 
-        multipart_data = MultipartEncoder(
-            fields={"id": identifiant, "pass": password})
+        multipart_data = MultipartEncoder(fields={"id": identifiant, "pass": password})
 
         self.session.cookies.clear()
 
@@ -83,8 +82,7 @@ class YggTorrentScraper:
 
         if response.status_code == 200:
             logger.debug("Login successful")
-            yggtorrent_token = response.cookies.get_dict()[
-                YGGTORRENT_TOKEN_COOKIE]
+            yggtorrent_token = response.cookies.get_dict()[YGGTORRENT_TOKEN_COOKIE]
 
             cookie = requests.cookies.create_cookie(
                 domain=YGGTORRENT_DOMAIN,
@@ -399,19 +397,19 @@ class YggTorrentScraper:
 
     def download_from_torrent(self, torrent=None, destination_path="./"):
         if torrent is not None:
-            self.download_from_torrent_url(
+            return self.download_from_torrent_url(
                 torrent_url=torrent.url, destination_path=destination_path
             )
 
     def download_from_torrent_url(self, torrent_url=None, destination_path="./"):
         if torrent_url is None:
-            return
+            return None
 
         response = self.session.get(YGGTORRENT_BASE_URL + torrent_url)
 
         temp_file_name = response.headers.get("content-disposition")
 
-        file_name = temp_file_name[temp_file_name.index("filename=") + 10: -1]
+        file_name = temp_file_name[temp_file_name.index("filename=") + 10 : -1]
 
         if not os.path.exists(destination_path):
             os.makedirs(destination_path)
@@ -423,6 +421,8 @@ class YggTorrentScraper:
         file.write(response.content)
 
         file.close()
+
+        return file_full_path
 
 
 class Torrent:
@@ -555,3 +555,20 @@ class TorrentComment:
         to_string += os.linesep
 
         return to_string
+
+
+if __name__ == "__main__":
+    scraper = YggTorrentScraper(session=requests.session())
+
+    search_url = scraper.create_search_url(
+        name="walking dead", uploaders={"Tinkerbell"}
+    )
+
+    print(search_url)
+
+    torrents_url = scraper.search(name="walking dead", uploaders={"Tinkerbell"})
+
+    for torrent_url in torrents_url:
+        print(torrent_url)
+
+    torrent = scraper.extract_details(torrents_url[0])

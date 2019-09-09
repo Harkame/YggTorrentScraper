@@ -28,15 +28,31 @@ class TestDownload(unittest.TestCase):
         if not os.path.exists(self.destination_path):
             os.makedirs(self.destination_path)
 
-    def test_download(self):
+    def test_download_from_torrent(self):
         most_completed = self.scraper.most_completed()
 
         torrent = self.scraper.extract_details(most_completed[0])
 
         self.assertTrue(torrent.url is not None)
 
-        self.scraper.download_from_torrent(
-            torrent=torrent, destination_path=self.destination_path)
+        file_full_path = self.scraper.download_from_torrent(
+            torrent=torrent, destination_path=self.destination_path
+        )
+
+        self.assertTrue(os.path.getsize(file_full_path) > 1000)
+
+    def test_download_from_torrent_url(self):
+        most_completed = self.scraper.most_completed()
+
+        torrent = self.scraper.extract_details(most_completed[0])
+
+        self.assertTrue(torrent.url is not None)
+
+        file_full_path = self.scraper.download_from_torrent_url(
+            torrent_url=torrent.url, destination_path=self.destination_path
+        )
+
+        self.assertTrue(os.path.getsize(file_full_path) > 1000)
 
     def tearDown(self):
         if os.path.exists(self.destination_path):

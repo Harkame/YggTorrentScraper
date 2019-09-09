@@ -1,14 +1,14 @@
-from ..yggtorrentscraper import YggTorrentScraper
-import requests
 import unittest
+
+import requests
+
+from ..yggtorrentscraper import YggTorrentScraper
 
 
 class TestExtractDetails(unittest.TestCase):
     scraper = YggTorrentScraper(requests.session())
 
     def test_extract_details(self):
-        torrent = self.scraper.extract_details(
-            "https://www2.yggtorrent.ch/torrent/filmvidéo/série-tv/3347-the+walking+dead+s05+french+web-dl+xvid-asphixias"
-        )
+        torrent_url = self.scraper.most_completed()[0]
 
-        print(torrent.__str__(files=True, comments=True))
+        torrent = self.scraper.extract_details(torrent_url)
