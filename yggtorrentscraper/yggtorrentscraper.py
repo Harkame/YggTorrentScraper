@@ -120,7 +120,7 @@ class YggTorrentScraper:
     def search(
         self,
         name=None,
-        category=None,
+        category="all",
         sub_category=None,
         descriptions=None,
         files=None,
@@ -279,7 +279,7 @@ class YggTorrentScraper:
         self,
         search_url="",
         name=None,
-        category=None,
+        category="all",
         sub_category=None,
         descriptions=None,
         files=None,
@@ -335,7 +335,7 @@ class YggTorrentScraper:
     def create_search_url(
         self,
         name=None,
-        category=None,
+        category="all",
         sub_category=None,
         descriptions=None,
         files=None,
@@ -354,12 +354,11 @@ class YggTorrentScraper:
         if name is not None:
             formated_search_url += name
 
-        if category is not None:
-            formated_search_url += YGGTORRENT_SEARCH_URL_CATEGORY
-            formated_search_url += category
+        formated_search_url += YGGTORRENT_SEARCH_URL_CATEGORY
+        formated_search_url += category
 
+        formated_search_url += YGGTORRENT_SEARCH_URL_SUB_CATEGORY
         if sub_category is not None:
-            formated_search_url += YGGTORRENT_SEARCH_URL_SUB_CATEGORY
             formated_search_url += sub_category
 
         if page > 0:
