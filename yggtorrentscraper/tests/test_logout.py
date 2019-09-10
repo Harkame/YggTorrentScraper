@@ -23,7 +23,15 @@ class TestAuthentification(unittest.TestCase):
 
         self.assertTrue(is_authentified)
 
+        is_logout = self.scraper.logout()
+
+        self.assertTrue(is_logout)
+
     def test_login_failed(self):
         is_authentified = self.scraper.login("myidentifiant", "mypassword")
 
         self.assertFalse(is_authentified)
+
+        is_logout = self.scraper.logout()
+
+        self.assertFalse(is_logout)

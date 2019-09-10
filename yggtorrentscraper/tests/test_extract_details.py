@@ -21,9 +21,9 @@ class TestExtractDetails(unittest.TestCase):
 
         self.assertTrue(len(torrent.keywords) > 0)
 
-        self.assertTrue(torrent.completed > 0)
-        self.assertTrue(torrent.seeders > 0)
-        self.assertTrue(torrent.leechers > 0)
+        self.assertTrue(torrent.completed > -1)
+        self.assertTrue(torrent.seeders > -1)
+        self.assertTrue(torrent.leechers > -1)
 
         self.assertTrue(torrent.url is None)
 
@@ -47,9 +47,9 @@ class TestExtractDetails(unittest.TestCase):
 
         self.assertTrue(len(torrent.keywords) > 0)
 
-        self.assertTrue(torrent.completed > 0)
-        self.assertTrue(torrent.seeders > 0)
-        self.assertTrue(torrent.leechers > 0)
+        self.assertTrue(torrent.completed > -1)
+        self.assertTrue(torrent.seeders > -1)
+        self.assertTrue(torrent.leechers > -1)
 
         self.assertTrue(torrent.url is not None)
 

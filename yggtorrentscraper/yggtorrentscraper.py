@@ -63,7 +63,8 @@ class YggTorrentScraper:
         Login request with the specified identifiant and password, return an yggtorrent_token, necessary to download
         """
 
-        multipart_data = MultipartEncoder(fields={"id": identifiant, "pass": password})
+        multipart_data = MultipartEncoder(
+            fields={"id": identifiant, "pass": password})
 
         self.session.cookies.clear()
 
@@ -79,7 +80,8 @@ class YggTorrentScraper:
 
         if response.status_code == 200:
             logger.debug("Login successful")
-            yggtorrent_token = response.cookies.get_dict()[YGGTORRENT_TOKEN_COOKIE]
+            yggtorrent_token = response.cookies.get_dict()[
+                YGGTORRENT_TOKEN_COOKIE]
 
             cookie = requests.cookies.create_cookie(
                 domain=YGGTORRENT_DOMAIN,
@@ -100,14 +102,14 @@ class YggTorrentScraper:
         Logout request
         """
         response = self.session.get(YGGTORRENT_URL_LOGOUT)
-        
+
         self.session.cookies.clear()
 
         logger.debug("status_code : %s", response.status_code)
 
         if response.status_code == 200:
             logger.debug("Logout successful")
- 
+
             return True
         else:
             logger.debug("Logout failed")
@@ -408,7 +410,7 @@ class YggTorrentScraper:
 
         temp_file_name = response.headers.get("content-disposition")
 
-        file_name = temp_file_name[temp_file_name.index("filename=") + 10 : -1]
+        file_name = temp_file_name[temp_file_name.index("filename=") + 10: -1]
 
         if not os.path.exists(destination_path):
             os.makedirs(destination_path)
@@ -436,9 +438,9 @@ class Torrent:
 
     keywords = []
 
-    completed = 0
-    seeders = 0
-    leechers = 0
+    completed = -1
+    seeders = -1
+    leechers = -1
 
     url = None
 
