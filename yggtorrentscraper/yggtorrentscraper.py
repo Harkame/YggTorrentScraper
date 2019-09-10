@@ -427,10 +427,10 @@ class Torrent:
     Torrent entity
     """
 
-    name = ""
+    name = None
     uploaded_datetime = None
-    size = ""
-    uploader = ""
+    size = None
+    uploader = None
 
     keywords = []
 
