@@ -1,5 +1,3 @@
-from __future__ import absolute_import, division
-
 import datetime
 import errno
 import logging
@@ -462,16 +460,15 @@ class Torrent:
             to_string += self.url
         else:
             to_string += "N/A"
-        to_string += os.linesep
 
         to_string += os.linesep
+        to_string += os.linesep
 
-        to_string += "Keywords  : "
+        to_string += f"Keywords ({len(self.keywords)})  : "
         to_string += os.linesep
 
         for keyword in self.keywords:
-            to_string += "- "
-            to_string += str(keyword)
+            to_string += f"- {keyword}"
             to_string += os.linesep
 
         to_string += os.linesep
@@ -502,7 +499,7 @@ class Torrent:
 
         to_string += os.linesep
 
-        to_string += "Files ({}) : ".format(len(self.files))
+        to_string += f"Files ({len(self.files)})"
         to_string += os.linesep
 
         if files:
@@ -512,7 +509,7 @@ class Torrent:
 
         to_string += os.linesep
 
-        to_string += "Comments ({}) : ".format(len(self.comments))
+        to_string += f"Comments ({len(self.comments)})"
         to_string += os.linesep
 
         if comments:
@@ -572,16 +569,3 @@ class TorrentComment:
         to_string += os.linesep
 
         return to_string
-
-
-if __name__ == "__main__":
-    scraper = YggTorrentScraper(session=requests.session())
-
-    torrents_url = scraper.most_completed()
-
-    torrent_url = torrents_url[0]
-
-    torrent = scraper.extract_details(torrents_url[0])
-
-    print(torrent)
-    # print(torrent.__str__(files=True, comments=True))

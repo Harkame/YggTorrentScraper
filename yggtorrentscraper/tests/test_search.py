@@ -9,7 +9,7 @@ class TestResearch(unittest.TestCase):
     scraper = YggTorrentScraper(requests.session())
 
     torrent_name = "walking dead s09"
-    torrent_uploaders = ["brandit", "mrchris44"]
+    torrent_uploader = "brandit"
 
     torrent_name_2 = "blue oyster cult"
 
@@ -38,15 +38,13 @@ class TestResearch(unittest.TestCase):
 
     def test_search_uploader(self):
         torrents_url = self.scraper.search(
-            name=self.torrent_name, uploaders={self.torrent_uploaders[0]}
+            name=self.torrent_name, uploader=self.torrent_uploader
         )
 
         for torrent_url in torrents_url:
             torrent = self.scraper.extract_details(torrent_url)
 
-            self.assertTrue(
-                torrent.uploader.lower() == self.torrent_uploaders[0].lower()
-            )
+            self.assertTrue(torrent.uploader.lower() == self.torrent_uploader.lower())
 
     """
     def test_search_sort_publish_date_asc(self):
@@ -68,6 +66,7 @@ class TestResearch(unittest.TestCase):
         torrents_url = self.scraper.search(
             name="blue oyster cult", sort="leech", order="desc"
         )
+    """
 
     def test_search_sort_completed_asc(self):
         torrents_url = self.scraper.search(
@@ -98,68 +97,6 @@ class TestResearch(unittest.TestCase):
                 self.assertTrue(torrent_old.completed >= torrent.completed)
 
             torrent_old = torrent
-
-    def test_search_sort_seed_asc(self):
-        torrents_url = self.scraper.search(
-            name="blue oyster cult", sort="seed", order="asc"
-        )
-
-        torrent_old = None
-
-        for torrent_url in torrents_url:
-            torrent = self.scraper.extract_details(torrent_url)
-
-            if torrent_old is not None:
-                self.assertTrue(torrent_old.seeders <= torrent.seeders)
-
-            torrent_old = torrent
-
-    def test_search_sort_seed_desc(self):
-        torrents_url = self.scraper.search(
-            name="blue oyster cult", sort="seed", order="desc"
-        )
-
-        torrent_old = None
-
-        for torrent_url in torrents_url:
-            torrent = self.scraper.extract_details(torrent_url)
-
-            if torrent_old is not None:
-                self.assertTrue(torrent_old.seeders >= torrent.seeders)
-
-            torrent_old = torrent
-
-    def test_search_sort_leech_asc(self):
-        torrents_url = self.scraper.search(
-            name="blue oyster cult", sort="leech", order="asc"
-        )
-
-        torrent_old = None
-
-        for torrent_url in torrents_url:
-            torrent = self.scraper.extract_details(torrent_url)
-
-            if torrent_old is not None:
-                self.assertTrue(torrent_old.leechers <= torrent.leechers)
-
-            torrent_old = torrent
-
-    def test_search_sort_leech_desc(self):
-        torrents_url = self.scraper.search(
-            name="blue oyster cult", sort="leech", order="desc"
-        )
-
-        torrent_old = None
-
-        for torrent_url in torrents_url:
-            torrent = self.scraper.extract_details(torrent_url)
-
-            if torrent_old is not None:
-                self.assertTrue(torrent_old.leechers >= torrent.leechers)
-
-            torrent_old = torrent
-
-    """
 
     def test_search_multiple_page(self):
         torrents_url = self.scraper.search(name="walking dead")
