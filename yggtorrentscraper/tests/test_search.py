@@ -13,19 +13,6 @@ class TestResearch(unittest.TestCase):
 
     torrent_name_2 = "blue oyster cult"
 
-    def test_search(self):
-        torrents_url = self.scraper.search(
-            name="walking dead s08",
-            category="",
-            sub_category="",
-            descriptions=None,
-            files="mkv",
-            sort="publish_date",
-            order="asc",
-        )
-
-        # torrent = self.scraper.extract_details(torrent_url=torrents_url[0])
-
     def test_search_name(self):
         torrents_url = self.scraper.search(name=self.torrent_name)
 
@@ -45,6 +32,28 @@ class TestResearch(unittest.TestCase):
             torrent = self.scraper.extract_details(torrent_url)
 
             self.assertTrue(torrent.uploader.lower() == self.torrent_uploader.lower())
+
+    def test_search_category(self):
+        torrents_url = self.scraper.search(name=self.torrent_name, category="")
+
+        # TODO, category
+
+    def test_search_sub_category(self):
+        torrents_url = self.scraper.search(name=self.torrent_name, sub_category="")
+
+        # TODO, sub_category
+
+    def test_search_files(self):
+        torrents_url = self.scraper.search(name=self.torrent_name, files={"mkv"})
+
+        # TODO, what is files ?
+
+    def test_search_descriptions(self):
+        torrents_url = self.scraper.search(
+            name=self.torrent_name, descriptions={"serie"}
+        )
+
+        # TODO, what is descriptions ?
 
     """
     def test_search_sort_publish_date_asc(self):
