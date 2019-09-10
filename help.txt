@@ -9,3 +9,5 @@ python setup.py sdist bdist_wheel
 twine upload dist/*.tar.gz
 
 codecov --token=$CODECOV_TOKEN --f=./coverage.xml
+
+https://coverage.readthedocs.io/en/coverage-4.2/excluding.html
