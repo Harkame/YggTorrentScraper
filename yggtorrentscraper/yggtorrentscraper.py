@@ -122,7 +122,7 @@ class YggTorrentScraper:
         sub_category=None,
         descriptions=None,
         files=None,
-        uploaders=None,
+        uploader=None,
         sort="publish_date",
         order="asc",
     ):
@@ -133,7 +133,7 @@ class YggTorrentScraper:
             sub_category=sub_category,
             descriptions=descriptions,
             files=files,
-            uploaders=uploaders,
+            uploader=uploader,
             sort=sort,
             order=order,
         )
@@ -145,7 +145,7 @@ class YggTorrentScraper:
             sub_category=sub_category,
             descriptions=descriptions,
             files=files,
-            uploaders=uploaders,
+            uploader=uploader,
             sort=sort,
             order=order,
         )
@@ -165,6 +165,11 @@ class YggTorrentScraper:
         torrent_page = BeautifulSoup(response.content, features="lxml")
 
         torrent = Torrent()
+
+        term_tags = torrent_page.find_all("a", {"class": "term"})
+
+        for term_tag in term_tags:
+            torrent.keywords.append(term_tag.text)
 
         connection_tags = torrent_page.find("tr", {"id": "adv_search_cat"}).find_all(
             "strong"
@@ -281,7 +286,7 @@ class YggTorrentScraper:
         sub_category=None,
         descriptions=None,
         files=None,
-        uploaders=None,
+        uploader=None,
         sort="date",
         order="asc",
         page=0,
@@ -313,7 +318,7 @@ class YggTorrentScraper:
                 sub_category=sub_category,
                 descriptions=descriptions,
                 files=files,
-                uploaders=uploaders,
+                uploader=uploader,
                 sort=sort,
                 order=order,
                 page=page * TORRENT_PER_PAGE,
@@ -337,7 +342,7 @@ class YggTorrentScraper:
         sub_category=None,
         descriptions=None,
         files=None,
-        uploaders=None,
+        uploader=None,
         sort="publish_date",
         order="asc",
         page=0,
@@ -377,12 +382,10 @@ class YggTorrentScraper:
                 formated_search_url += file
                 formated_search_url += "+"
 
-        if uploaders is not None:
+        if uploader is not None:
             formated_search_url += YGGTORRENT_SEARCH_URL_UPLOADER
 
-            for uploader in uploaders:
-                formated_search_url += uploader
-                formated_search_url += "+"
+            formated_search_url += uploader
 
         formated_search_url += YGGTORRENT_SEARCH_URL_SORT
         formated_search_url += sort
@@ -435,6 +438,8 @@ class Torrent:
     size = ""
     uploader = ""
 
+    keywords = []
+
     completed = 0
     seeders = 0
     leechers = 0
@@ -457,6 +462,18 @@ class Torrent:
             to_string += self.url
         else:
             to_string += "N/A"
+        to_string += os.linesep
+
+        to_string += os.linesep
+
+        to_string += "Keywords  : "
+        to_string += os.linesep
+
+        for keyword in self.keywords:
+            to_string += "- "
+            to_string += str(keyword)
+            to_string += os.linesep
+
         to_string += os.linesep
 
         to_string += "Uploaded  : "
@@ -518,11 +535,11 @@ class TorrentFile:
     def __str__(self):
         to_string = ""
 
-        to_string += "size      :"
+        to_string += "size      : "
         to_string += self.size
         to_string += os.linesep
 
-        to_string += "file_name :"
+        to_string += "file_name : "
         to_string += self.file_name
         to_string += os.linesep
 
@@ -560,15 +577,11 @@ class TorrentComment:
 if __name__ == "__main__":
     scraper = YggTorrentScraper(session=requests.session())
 
-    search_url = scraper.create_search_url(
-        name="walking dead", uploaders={"Tinkerbell"}
-    )
+    torrents_url = scraper.most_completed()
 
-    print(search_url)
-
-    torrents_url = scraper.search(name="walking dead", uploaders={"Tinkerbell"})
-
-    for torrent_url in torrents_url:
-        print(torrent_url)
+    torrent_url = torrents_url[0]
 
     torrent = scraper.extract_details(torrents_url[0])
+
+    print(torrent)
+    # print(torrent.__str__(files=True, comments=True))
