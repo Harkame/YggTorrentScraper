@@ -6,32 +6,19 @@ import requests
 from ..yggtorrentscraper import YggTorrentScraper
 
 
-class TestAuthentification(unittest.TestCase):
+class TestLogout(unittest.TestCase):
     def setUp(self):
         self.scraper = YggTorrentScraper(requests.session())
 
-    def test_login_success(self):
+    def test_logout_success(self):
         yggtorrent_identifiant = os.environ.get("YGGTORRENT_IDENTIFIANT")
         yggtorrent_password = os.environ.get("YGGTORRENT_PASSWORD")
 
-        self.assertTrue(yggtorrent_identifiant is not None)
-        self.assertTrue(yggtorrent_password is not None)
+        self.scraper.login(yggtorrent_identifiant, yggtorrent_password)
 
-        is_authentified = self.scraper.login(
-            yggtorrent_identifiant, yggtorrent_password
-        )
+        self.assertTrue(self.scraper.logout())
 
-        self.assertTrue(is_authentified)
+    def test_logout_failed(self):
+        self.scraper.login("myidentifiant", "mypassword")
 
-        is_logout = self.scraper.logout()
-
-        self.assertTrue(is_logout)
-
-    def test_login_failed(self):
-        is_authentified = self.scraper.login("myidentifiant", "mypassword")
-
-        self.assertFalse(is_authentified)
-
-        is_logout = self.scraper.logout()
-
-        self.assertFalse(is_logout)
+        self.assertFalse(self.scraper.logout())
