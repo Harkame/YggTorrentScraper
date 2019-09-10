@@ -100,12 +100,14 @@ class YggTorrentScraper:
         Logout request
         """
         response = self.session.get(YGGTORRENT_URL_LOGOUT)
+        
+        self.session.cookies.clear()
 
         logger.debug("status_code : %s", response.status_code)
 
         if response.status_code == 200:
             logger.debug("Logout successful")
-
+ 
             return True
         else:
             logger.debug("Logout failed")
