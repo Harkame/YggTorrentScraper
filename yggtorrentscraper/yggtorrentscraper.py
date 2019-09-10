@@ -403,9 +403,6 @@ class YggTorrentScraper:
             )
 
     def download_from_torrent_url(self, torrent_url=None, destination_path="./"):
-        if torrent_url is None:
-            return None
-
         response = self.session.get(YGGTORRENT_BASE_URL + torrent_url)
 
         temp_file_name = response.headers.get("content-disposition")

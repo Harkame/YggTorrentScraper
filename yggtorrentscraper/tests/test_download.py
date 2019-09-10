@@ -24,10 +24,6 @@ class TestDownload(unittest.TestCase):
 
         self.scraper.login(yggtorrent_identifiant, yggtorrent_password)
 
-    def setUp(self):
-        if not os.path.exists(self.destination_path):
-            os.makedirs(self.destination_path)
-
     def test_download_from_torrent(self):
         most_completed = self.scraper.most_completed()
 
