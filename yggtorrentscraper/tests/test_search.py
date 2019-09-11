@@ -31,8 +31,7 @@ class TestResearch(unittest.TestCase):
         for torrent_url in torrents_url:
             torrent = self.scraper.extract_details(torrent_url)
 
-            self.assertTrue(torrent.uploader.lower() ==
-                            self.torrent_uploader.lower())
+            self.assertTrue(torrent.uploader.lower() == self.torrent_uploader.lower())
 
     def test_search_category(self):
         torrents_url = self.scraper.search(name=self.torrent_name, category="")
@@ -40,14 +39,12 @@ class TestResearch(unittest.TestCase):
         # TODO, category
 
     def test_search_sub_category(self):
-        torrents_url = self.scraper.search(
-            name=self.torrent_name, sub_category="")
+        torrents_url = self.scraper.search(name=self.torrent_name, sub_category="")
 
         # TODO, sub_category
 
     def test_search_files(self):
-        torrents_url = self.scraper.search(
-            name=self.torrent_name, files={"mkv"})
+        torrents_url = self.scraper.search(name=self.torrent_name, files={"mkv"})
 
         # TODO, what is files ?
 
@@ -57,28 +54,6 @@ class TestResearch(unittest.TestCase):
         )
 
         # TODO, what is descriptions ?
-
-    """
-    def test_search_sort_publish_date_asc(self):
-        torrents_url = self.scraper.search(
-            name="blue oyster cult", sort="publish_date", order="asc"
-        )
-
-    def test_search_sort_publish_date_desc(self):
-        torrents_url = self.scraper.search(
-            name="blue oyster cult", sort="completed", order="desc"
-        )
-
-    def test_search_sort_size_asc(self):
-        torrents_url = self.scraper.search(
-            name="blue oyster cult", sort="leech", order="desc"
-        )
-
-    def test_search_sort_size_desc(self):
-        torrents_url = self.scraper.search(
-            name="blue oyster cult", sort="leech", order="desc"
-        )
-    """
 
     def test_search_sort_completed_asc(self):
         torrents_url = self.scraper.search(

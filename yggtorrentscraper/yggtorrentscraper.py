@@ -7,7 +7,9 @@ import requests
 from bs4 import BeautifulSoup
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 
-__all__ = ["YggTorrentScraper", "YGGTORRENT_TLD"]
+from .torrent import Torrent, TorrentComment, TorrentFile
+
+__all__ = ["YggTorrentScraper", "YGGTORRENT_TLD", "YGGTORRENT_BASE_URL"]
 
 YGGTORRENT_TLD = "ch"
 
@@ -18,33 +20,37 @@ logger = logging.getLogger("yggtorrentscraper")
 
 YGGTORRENT_DOMAIN = ".yggtorrent.gg"
 YGGTORRENT_TOKEN_COOKIE = "ygg_"
-YGGTORRENT_SEARCH_URL_DESCRIPTION = "&description="
-YGGTORRENT_SEARCH_URL_FILE = "&file="
-YGGTORRENT_SEARCH_URL_UPLOADER = "&uploader="
-YGGTORRENT_SEARCH_URL_CATEGORY = "&category="
-YGGTORRENT_SEARCH_URL_SUB_CATEGORY = "&sub_category="
-YGGTORRENT_SEARCH_URL_ORDER = "&order="
-YGGTORRENT_SEARCH_URL_SORT = "&sort="
-YGGTORRENT_SEARCH_URL_DO = "&do="
-YGGTORRENT_SEARCH_URL_PAGE = "&page="
-
-YGGTORRENT_SEARCH_URL_DESCRIPTION = "&description="
-YGGTORRENT_SEARCH_URL_FILE = "&file="
-YGGTORRENT_SEARCH_URL_UPLOADER = "&uploader="
-YGGTORRENT_SEARCH_URL_CATEGORY = "&category="
-YGGTORRENT_SEARCH_URL_SUB_CATEGORY = "&sub_category="
-YGGTORRENT_SEARCH_URL_ORDER = "&order="
-YGGTORRENT_SEARCH_URL_SORT = "&sort="
-YGGTORRENT_SEARCH_URL_DO = "&do="
-YGGTORRENT_SEARCH_URL_PAGE = "&page="
 
 YGGTORRENT_BASE_URL = f"https://www2.yggtorrent.{YGGTORRENT_TLD}"
 
 YGGTORRENT_SEARCH_URL = f"{YGGTORRENT_BASE_URL}/engine/search?name="
+
+YGGTORRENT_SEARCH_URL = f"{YGGTORRENT_BASE_URL}/engine/search?name="
+
+YGGTORRENT_SEARCH_URL_DESCRIPTION = "&description="
+YGGTORRENT_SEARCH_URL_FILE = "&file="
+YGGTORRENT_SEARCH_URL_UPLOADER = "&uploader="
+YGGTORRENT_SEARCH_URL_CATEGORY = "&category="
+YGGTORRENT_SEARCH_URL_SUB_CATEGORY = "&sub_category="
+YGGTORRENT_SEARCH_URL_ORDER = "&order="
+YGGTORRENT_SEARCH_URL_SORT = "&sort="
+YGGTORRENT_SEARCH_URL_DO = "&do="
+YGGTORRENT_SEARCH_URL_PAGE = "&page="
+
+YGGTORRENT_SEARCH_URL_DESCRIPTION = "&description="
+YGGTORRENT_SEARCH_URL_FILE = "&file="
+YGGTORRENT_SEARCH_URL_UPLOADER = "&uploader="
+YGGTORRENT_SEARCH_URL_CATEGORY = "&category="
+YGGTORRENT_SEARCH_URL_SUB_CATEGORY = "&sub_category="
+YGGTORRENT_SEARCH_URL_ORDER = "&order="
+YGGTORRENT_SEARCH_URL_SORT = "&sort="
+YGGTORRENT_SEARCH_URL_DO = "&do="
+YGGTORRENT_SEARCH_URL_PAGE = "&page="
+
+
 YGGTORRENT_GET_FILES = f"{YGGTORRENT_BASE_URL}/engine/get_files?torrent="
 YGGTORRENT_GET_INFO = f"https://www2.yggtorrentchg/engine/get_nfo?torrent="
 
-YGGTORRENT_SEARCH_URL = f"{YGGTORRENT_BASE_URL}/engine/search?name="
 YGGTORRENT_MOST_COMPLETED_URL = f"{YGGTORRENT_BASE_URL}/engine/mostcompleted"
 
 TORRENT_PER_PAGE = 50
@@ -63,8 +69,7 @@ class YggTorrentScraper:
         Login request with the specified identifiant and password, return an yggtorrent_token, necessary to download
         """
 
-        multipart_data = MultipartEncoder(
-            fields={"id": identifiant, "pass": password})
+        multipart_data = MultipartEncoder(fields={"id": identifiant, "pass": password})
 
         self.session.cookies.clear()
 
@@ -80,8 +85,7 @@ class YggTorrentScraper:
 
         if response.status_code == 200:
             logger.debug("Login successful")
-            yggtorrent_token = response.cookies.get_dict()[
-                YGGTORRENT_TOKEN_COOKIE]
+            yggtorrent_token = response.cookies.get_dict()[YGGTORRENT_TOKEN_COOKIE]
 
             cookie = requests.cookies.create_cookie(
                 domain=YGGTORRENT_DOMAIN,
@@ -128,7 +132,7 @@ class YggTorrentScraper:
         order="asc",
     ):
 
-        search_url = self.create_search_url(
+        search_url = create_search_url(
             name=name,
             category=category,
             sub_category=sub_category,
@@ -313,7 +317,7 @@ class YggTorrentScraper:
         torrents = []
 
         for page in range(0, limit_page):
-            search_url = self.create_search_url(
+            search_url = create_search_url(
                 name=name,
                 category=category,
                 sub_category=sub_category,
@@ -336,69 +340,6 @@ class YggTorrentScraper:
 
         return torrents
 
-    def create_search_url(
-        self,
-        name=None,
-        category="all",
-        sub_category=None,
-        descriptions=None,
-        files=None,
-        uploader=None,
-        sort="publish_date",
-        order="asc",
-        page=0,
-        do="search",
-    ):
-        """
-        Return a formated URL for torrent's search
-        """
-
-        formated_search_url = YGGTORRENT_SEARCH_URL
-
-        if name is not None:
-            formated_search_url += name
-
-        formated_search_url += YGGTORRENT_SEARCH_URL_CATEGORY
-        formated_search_url += category
-
-        formated_search_url += YGGTORRENT_SEARCH_URL_SUB_CATEGORY
-        if sub_category is not None:
-            formated_search_url += sub_category
-
-        if page > 0:
-            formated_search_url += YGGTORRENT_SEARCH_URL_PAGE
-            formated_search_url += str(page)
-
-        if descriptions is not None:
-            formated_search_url += YGGTORRENT_SEARCH_URL_DESCRIPTION
-
-            for description in descriptions:
-                formated_search_url += description
-                formated_search_url += "+"
-
-        if files is not None:
-            formated_search_url += YGGTORRENT_SEARCH_URL_FILE
-
-            for file in files:
-                formated_search_url += file
-                formated_search_url += "+"
-
-        if uploader is not None:
-            formated_search_url += YGGTORRENT_SEARCH_URL_UPLOADER
-
-            formated_search_url += uploader
-
-        formated_search_url += YGGTORRENT_SEARCH_URL_SORT
-        formated_search_url += sort
-
-        formated_search_url += YGGTORRENT_SEARCH_URL_ORDER
-        formated_search_url += order
-
-        formated_search_url += YGGTORRENT_SEARCH_URL_DO
-        formated_search_url += do
-
-        return formated_search_url
-
     def download_from_torrent(self, torrent=None, destination_path="./"):
         if torrent is not None:
             return self.download_from_torrent_url(
@@ -410,7 +351,7 @@ class YggTorrentScraper:
 
         temp_file_name = response.headers.get("content-disposition")
 
-        file_name = temp_file_name[temp_file_name.index("filename=") + 10: -1]
+        file_name = temp_file_name[temp_file_name.index("filename=") + 10 : -1]
 
         if not os.path.exists(destination_path):
             os.makedirs(destination_path)
@@ -426,146 +367,64 @@ class YggTorrentScraper:
         return file_full_path
 
 
-class Torrent:
+def create_search_url(
+    name=None,
+    category="all",
+    sub_category=None,
+    descriptions=None,
+    files=None,
+    uploader=None,
+    sort="publish_date",
+    order="asc",
+    page=0,
+    do="search",
+):
     """
-    Torrent entity
-    """
-
-    name = None
-    uploaded_datetime = None
-    size = None
-    uploader = None
-
-    keywords = []
-
-    completed = -1
-    seeders = -1
-    leechers = -1
-
-    url = None
-
-    files = []
-    comments = []
-
-    def __str__(self, comments=False, files=False):
-        to_string = ""
-
-        to_string += "Name      : "
-        to_string += self.name
-        to_string += os.linesep
-
-        to_string += "Url       : "
-
-        if self.url is not None:
-            to_string += self.url
-        else:
-            to_string += "N/A"
-
-        to_string += os.linesep
-        to_string += os.linesep
-
-        to_string += f"Keywords ({len(self.keywords)})  : "
-        to_string += os.linesep
-
-        for keyword in self.keywords:
-            to_string += f"- {keyword}"
-            to_string += os.linesep
-
-        to_string += os.linesep
-
-        to_string += "Uploaded  : "
-        to_string += str(self.uploaded_datetime)
-        to_string += os.linesep
-
-        to_string += "Size      : "
-        to_string += str(self.size)
-        to_string += os.linesep
-
-        to_string += "Uploader  : "
-        to_string += self.uploader
-        to_string += os.linesep
-
-        to_string += "Completed : "
-        to_string += str(self.completed)
-        to_string += os.linesep
-
-        to_string += "Seeders   : "
-        to_string += str(self.seeders)
-        to_string += os.linesep
-
-        to_string += "Leechers  : "
-        to_string += str(self.leechers)
-        to_string += os.linesep
-
-        to_string += os.linesep
-
-        to_string += f"Files ({len(self.files)})"
-        to_string += os.linesep
-
-        if files:
-            for file in self.files:
-                to_string += str(file)
-                to_string += os.linesep
-
-        to_string += os.linesep
-
-        to_string += f"Comments ({len(self.comments)})"
-        to_string += os.linesep
-
-        if comments:
-            for comment in self.comments:
-                to_string += str(comment)
-                to_string += os.linesep
-
-        return to_string
-
-
-class TorrentFile:
-
-    """
-    Torrent's file entity
+    Return a formated URL for torrent's search
     """
 
-    size = ""
-    file_name = ""
+    formated_search_url = YGGTORRENT_SEARCH_URL
 
-    def __str__(self):
-        to_string = ""
+    if name is not None:
+        formated_search_url += name
 
-        to_string += "size      : "
-        to_string += self.size
-        to_string += os.linesep
+    formated_search_url += YGGTORRENT_SEARCH_URL_CATEGORY
+    formated_search_url += category
 
-        to_string += "file_name : "
-        to_string += self.file_name
-        to_string += os.linesep
+    formated_search_url += YGGTORRENT_SEARCH_URL_SUB_CATEGORY
+    if sub_category is not None:
+        formated_search_url += sub_category
 
-        return to_string
+    if page > 0:
+        formated_search_url += YGGTORRENT_SEARCH_URL_PAGE
+        formated_search_url += str(page)
 
+    if descriptions is not None:
+        formated_search_url += YGGTORRENT_SEARCH_URL_DESCRIPTION
 
-class TorrentComment:
+        for description in descriptions:
+            formated_search_url += description
+            formated_search_url += "+"
 
-    """
-    Torrent's comment entity
-    """
+    if files is not None:
+        formated_search_url += YGGTORRENT_SEARCH_URL_FILE
 
-    author = ""
-    posted = ""
-    text = ""
+        for file in files:
+            formated_search_url += file
+            formated_search_url += "+"
 
-    def __str__(self):
-        to_string = ""
+    if uploader is not None:
+        formated_search_url += YGGTORRENT_SEARCH_URL_UPLOADER
 
-        to_string += "Author : "
-        to_string += self.author
-        to_string += os.linesep
+        formated_search_url += uploader
 
-        to_string += "Posted : "
-        to_string += str(self.posted)
-        to_string += os.linesep
+    formated_search_url += YGGTORRENT_SEARCH_URL_SORT
+    formated_search_url += sort
 
-        to_string += "Text   : "
-        to_string += str(self.text)
-        to_string += os.linesep
+    formated_search_url += YGGTORRENT_SEARCH_URL_ORDER
+    formated_search_url += order
 
-        return to_string
+    formated_search_url += YGGTORRENT_SEARCH_URL_DO
+    formated_search_url += do
+
+    return formated_search_url

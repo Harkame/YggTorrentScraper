@@ -186,7 +186,6 @@ scraper.logout()
 Declare environment variables (requiered for login, download tests)
 
 -   YGGTORRENT_IDENTIFIANT
-
 -   YGGTORRENT_PASSWORD
 
 ``` bash
