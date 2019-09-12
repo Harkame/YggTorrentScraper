@@ -11,7 +11,18 @@ import requests
 from bs4 import BeautifulSoup
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 
+<<<<<<< Updated upstream
 __all__ = ['YggTorrentScraper', 'YGGTORRENT_TLD']
+=======
+from yggtorrentscraper.torrent import Torrent, TorrentComment, TorrentFile
+
+__all__ = ["YggTorrentScraper", "YGGTORRENT_TLD", "YGGTORRENT_BASE_URL"]
+
+YGGTORRENT_TLD = "ch"
+
+YGGTORRENT_URL_LOGIN = "https://www.yggtorrent." + YGGTORRENT_TLD + "/user/login"
+YGGTORRENT_URL_LOGOUT = "https://www2.yggtorrent." + YGGTORRENT_TLD + "/user/logout"
+>>>>>>> Stashed changes
 
 YGGTORRENT_TLD = 'ch'
 
@@ -22,6 +33,7 @@ YGGTORRENT_URL_LOGOUT = 'https://www2.yggtorrent.' + \
 
 logger = logging.getLogger('yggtorrentscraper')
 
+<<<<<<< Updated upstream
 YGGTORRENT_DOMAIN = '.yggtorrent.gg'
 YGGTORRENT_TOKEN_COOKIE = 'ygg_'
 YGGTORRENT_RESEARCH_URL_DESCRIPTION = '&description='
@@ -52,6 +64,44 @@ YGGTORRENT_GET_INFO = f'https://www2.yggtorrentchg/engine/get_nfo?torrent='
 
 YGGTORRENT_RESEARCH_URL = f'${YGGTORRENT_BASE_URL}/engine/search?name='
 YGGTORRENT_MOST_COMPLETED_URL = f'{YGGTORRENT_BASE_URL}/engine/mostcompleted'
+=======
+YGGTORRENT_URL_SEARCH = f"{YGGTORRENT_BASE_URL}/engine/search?name="
+
+
+YGGTORRENT_URL_SEARCH_DESCRIPTION = "&description="
+YGGTORRENT_URL_SEARCH_FILE = "&file="
+YGGTORRENT_URL_SEARCH_UPLOADER = "&uploader="
+YGGTORRENT_URL_SEARCH_CATEGORY = "&category="
+YGGTORRENT_URL_SEARCH_SUB_CATEGORY = "&sub_category="
+YGGTORRENT_URL_SEARCH_ORDER = "&order="
+YGGTORRENT_URL_SEARCH_SORT = "&sort="
+YGGTORRENT_URL_SEARCH_DO = "&do="
+YGGTORRENT_URL_SEARCH_PAGE = "&page="
+
+YGGTORRENT_URL_SEARCH_DESCRIPTION = "&description="
+YGGTORRENT_URL_SEARCH_FILE = "&file="
+YGGTORRENT_URL_SEARCH_UPLOADER = "&uploader="
+YGGTORRENT_URL_SEARCH_CATEGORY = "&category="
+YGGTORRENT_URL_SEARCH_SUB_CATEGORY = "&sub_category="
+YGGTORRENT_URL_SEARCH_ORDER = "&order="
+YGGTORRENT_URL_SEARCH_SORT = "&sort="
+YGGTORRENT_URL_SEARCH_DO = "&do="
+YGGTORRENT_URL_SEARCH_PAGE = "&page="
+
+
+YGGTORRENT_GET_FILES = f"{YGGTORRENT_BASE_URL}/engine/get_files?torrent="
+YGGTORRENT_GET_INFO = f"https://www2.yggtorrentchg/engine/get_nfo?torrent="
+
+YGGTORRENT_URL_MOST_COMPLETED = f"{YGGTORRENT_BASE_URL}/engine/mostcompleted"
+YGGTORRENT_URL_MOST_SEEDED = f"{YGGTORRENT_BASE_URL}/engine/mostseeded"
+
+
+YGGTORRENT_URL_EXCLU = f"{YGGTORRENT_BASE_URL}/torrents/exclus?"
+
+YGGTORRENT_URL_TOP_DAY = f"{YGGTORRENT_BASE_URL}/engine/ajax_top_query/day"
+YGGTORRENT_URL_TOP_WEEK = f"{YGGTORRENT_BASE_URL}/engine/ajax_top_query/week"
+YGGTORRENT_URL_TOP_MONTH = f"{YGGTORRENT_BASE_URL}/engine/ajax_top_query/month"
+>>>>>>> Stashed changes
 
 TORRENT_PER_PAGE = 50
 
@@ -112,9 +162,38 @@ class YggTorrentScraper:
         if response.status_code == 200:
             logger.debug('Login successful')
         else:
+<<<<<<< Updated upstream
             logger.debug('Logout failed')
     '''
     def research_torrent(self, name='', category='', sub_category='', descriptions={}, files={}, uploaders={}, sort='', order=''):
+=======
+            logger.debug("Logout failed")
+
+            return False
+
+    def search(
+        self,
+        name=None,
+        category="all",
+        sub_category=None,
+        descriptions=None,
+        files=None,
+        uploader=None,
+        sort="publish_date",
+        order="asc",
+    ):
+
+        search_url = create_URL_SEARCH(
+            name=name,
+            category=category,
+            sub_category=sub_category,
+            descriptions=descriptions,
+            files=files,
+            uploader=uploader,
+            sort=sort,
+            order=order,
+        )
+>>>>>>> Stashed changes
 
         research_url = create_research_url(research)
 
@@ -204,6 +283,7 @@ class YggTorrentScraper:
         Return the most completed torrents url (TOP 100)
         """
 
+<<<<<<< Updated upstream
         header = {
             'Accept': 'application/json, text/javascript, */*; q=0.01',
         }
@@ -211,6 +291,37 @@ class YggTorrentScraper:
 
         json_response = self.session.post(
             YGGTORRENT_MOST_COMPLETED_URL, headers=header).json()
+=======
+        header = {"Accept": "application/json, text/javascript, */*; q=0.01"}
+        self.session.post(YGGTORRENT_URL_MOST_COMPLETED, headers=header)
+
+        json_response = self.session.post(
+            YGGTORRENT_URL_MOST_COMPLETED, headers=header
+        ).json()
+
+        torrents_url = []
+
+        for json_item in json_response:
+            root = BeautifulSoup(json_item[1], features="lxml")
+
+            a_tag = root.find("a")
+
+            torrents_url.append(a_tag["href"])
+
+        return torrents_url
+
+    def most_seeded(self):
+        """
+        Return the most seeded torrents url (TOP 100)
+        """
+
+        header = {"Accept": "application/json, text/javascript, */*; q=0.01"}
+        self.session.post(YGGTORRENT_URL_MOST_SEEDED, headers=header)
+
+        json_response = self.session.post(
+            YGGTORRENT_URL_MOST_SEEDED, headers=header
+        ).json()
+>>>>>>> Stashed changes
 
         torrents_url = []
 
@@ -244,8 +355,22 @@ class YggTorrentScraper:
         torrents = []
 
         for page in range(0, limit_page):
+<<<<<<< Updated upstream
             research_url = create_research_url(
                 research, page=page * TORRENT_PER_PAGE)
+=======
+            search_url = create_URL_SEARCH(
+                name=name,
+                category=category,
+                sub_category=sub_category,
+                descriptions=descriptions,
+                files=files,
+                uploader=uploader,
+                sort=sort,
+                order=order,
+                page=page * TORRENT_PER_PAGE,
+            )
+>>>>>>> Stashed changes
 
             response = scraper.get(research_url)
 
@@ -355,12 +480,31 @@ class YggTorrentScraper:
 
         file.close()
 
+<<<<<<< Updated upstream
 
 class Torrent:
+=======
+        return file_full_path
+
+
+def create_URL_SEARCH(
+    name=None,
+    category="all",
+    sub_category=None,
+    descriptions=None,
+    files=None,
+    uploader=None,
+    sort="publish_date",
+    order="asc",
+    page=0,
+    do="search",
+):
+>>>>>>> Stashed changes
     """
     Torrent entity
     """
 
+<<<<<<< Updated upstream
     name = ''
     uploaded_datetime = None
     size = ''
@@ -490,3 +634,59 @@ class TorrentComment:
         to_string += os.linesep
 
         return to_string
+=======
+    formated_URL_SEARCH = YGGTORRENT_URL_SEARCH
+
+    if name is not None:
+        formated_URL_SEARCH += name
+
+    formated_URL_SEARCH += YGGTORRENT_URL_SEARCH_CATEGORY
+    formated_URL_SEARCH += category
+
+    formated_URL_SEARCH += YGGTORRENT_URL_SEARCH_SUB_CATEGORY
+    if sub_category is not None:
+        formated_URL_SEARCH += sub_category
+
+    if page > 0:
+        formated_URL_SEARCH += YGGTORRENT_URL_SEARCH_PAGE
+        formated_URL_SEARCH += str(page)
+
+    if descriptions is not None:
+        formated_URL_SEARCH += YGGTORRENT_URL_SEARCH_DESCRIPTION
+
+        for description in descriptions:
+            formated_URL_SEARCH += description
+            formated_URL_SEARCH += "+"
+
+    if files is not None:
+        formated_URL_SEARCH += YGGTORRENT_URL_SEARCH_FILE
+
+        for file in files:
+            formated_URL_SEARCH += file
+            formated_URL_SEARCH += "+"
+
+    if uploader is not None:
+        formated_URL_SEARCH += YGGTORRENT_URL_SEARCH_UPLOADER
+
+        formated_URL_SEARCH += uploader
+
+    formated_URL_SEARCH += YGGTORRENT_URL_SEARCH_SORT
+    formated_URL_SEARCH += sort
+
+    formated_URL_SEARCH += YGGTORRENT_URL_SEARCH_ORDER
+    formated_URL_SEARCH += order
+
+    formated_URL_SEARCH += YGGTORRENT_URL_SEARCH_DO
+    formated_URL_SEARCH += do
+
+    return formated_URL_SEARCH
+
+
+if __name__ == "__main__":
+    scraper = YggTorrentScraper(requests.session())
+
+    torrents_url = scraper.most_seeded()
+
+    for torrent_url in torrents_url:
+        print(torrent_url)
+>>>>>>> Stashed changes
