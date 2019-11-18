@@ -1,0 +1,33 @@
+git update-index --assume-unchanged config.yml
+
+git update-index --no-assume-unchanged config.yml
+
+https://packaging.python.org/tutorials/packaging-projects/
+
+pip install setuptools wheel twine
+
+python setup.py sdist bdist_wheel
+
+twine upload dist/*.tar.gz
+
+codecov --token=$CODECOV_TOKEN -f=./coverage.xml
+
+https://coverage.readthedocs.io/en/coverage-4.2/excluding.html
+
+def pretty_print_POST(request):
+    """
+    At this point it is completely built and ready
+    to be fired; it is "prepared".
+
+    However pay attention at the formatting used in
+    this function because it is programmed to be pretty
+    printed and may differ from the actual request.
+    """
+    print(
+        "{}\n{}\r\n{}\r\n\r\nBody : {}".format(
+            "-----------START-----------",
+            request.method + " " + request.url,
+            "\r\n".join("{}: {}".format(k, v) for k, v in request.headers.items()),
+            request.body,
+        )
+    )

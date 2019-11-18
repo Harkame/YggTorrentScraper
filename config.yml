@@ -1,0 +1,35 @@
+list_research:
+  - research:
+    name:
+      The.Walking.Dead.S09
+    limit:
+      0
+    sort: #name|publish_date|size|completed|seed|leech
+      size
+    order: #asc|desc
+      desc
+
+  # - research:
+  #   name:
+  #     test
+  #   files:
+  #     - avi
+  #     - mkv
+  #   uploaders:
+  #     - uploader1
+  #     - uploader2
+  #   descriptions:
+  #       - description1
+  #       - description2
+  #   sort: #name|publish_date|size|completed|seed|leech
+  #     size
+  #   order: #asc|desc
+  #     desc
+  #   limit:
+  #     1
+
+destination_path:
+  ./torrents
+
+yggtorrent_tld:
+  ch
