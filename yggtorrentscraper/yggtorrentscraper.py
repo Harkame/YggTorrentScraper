@@ -7,22 +7,22 @@ import requests
 from bs4 import BeautifulSoup
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 
-from .torrent import Torrent, TorrentComment, TorrentFile
+from torrent import Torrent, TorrentComment, TorrentFile
 
 __all__ = ["YggTorrentScraper", "YGGTORRENT_TLD", "YGGTORRENT_BASE_URL"]
 
-YGGTORRENT_TLD = "ch"
+YGGTORRENT_TLD = "pe"
 
-YGGTORRENT_URL_LOGIN = "https://www.yggtorrent." + YGGTORRENT_TLD + "/user/login"
-YGGTORRENT_URL_LOGOUT = "https://www2.yggtorrent." + YGGTORRENT_TLD + "/user/logout"
+YGGTORRENT_BASE_URL = f"https://www2.yggtorrent.{YGGTORRENT_TLD}"
+
+YGGTORRENT_URL_LOGIN = f"{YGGTORRENT_BASE_URL}/user/login"
+YGGTORRENT_URL_LOGOUT = f"{YGGTORRENT_BASE_URL}/user/logout"
 
 logger = logging.getLogger("yggtorrentscraper")
 
 YGGTORRENT_DOMAIN = ".yggtorrent.gg"
 YGGTORRENT_TOKEN_COOKIE = "ygg_"
 
-YGGTORRENT_BASE_URL = f"https://www2.yggtorrent.{YGGTORRENT_TLD}"
-
 YGGTORRENT_SEARCH_URL = f"{YGGTORRENT_BASE_URL}/engine/search?name="
 
 YGGTORRENT_SEARCH_URL = f"{YGGTORRENT_BASE_URL}/engine/search?name="
@@ -46,7 +46,6 @@ YGGTORRENT_SEARCH_URL_ORDER = "&order="
 YGGTORRENT_SEARCH_URL_SORT = "&sort="
 YGGTORRENT_SEARCH_URL_DO = "&do="
 YGGTORRENT_SEARCH_URL_PAGE = "&page="
-
 
 YGGTORRENT_GET_FILES = f"{YGGTORRENT_BASE_URL}/engine/get_files?torrent="
 YGGTORRENT_GET_INFO = f"https://www2.yggtorrentchg/engine/get_nfo?torrent="
@@ -61,19 +60,31 @@ YGGTORRENT_FILES_URL = f"{YGGTORRENT_BASE_URL}/engine/get_files?torrent="
 class YggTorrentScraper:
     session = None
 
-    def __init__(self, session):
+    def __init__(self, session, yggtorrent_tld=None):
         self.session = session
+
+        if yggtorrent_tld is not None:
+            YGGTORRENT_TLD = yggtorrent_tld
 
     def login(self, identifiant, password):
         """
         Login request with the specified identifiant and password, return an yggtorrent_token, necessary to download
         """
-
-        multipart_data = MultipartEncoder(fields={"id": identifiant, "pass": password})
-
         self.session.cookies.clear()
 
-        headers = {"content-type": multipart_data.content_type}
+        multipart_data = MultipartEncoder({"id": identifiant, "pass": password})
+
+        headers = {
+            "Accept": "*/*",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Accept-Language": "fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3",
+            "Connection": "keep-alive",
+            "Content-Type": "multipart/form-data; boundary=---------------------------255191561306",
+            "Host": "www5.yggtorrent.pe",
+            "TE": "Trailers",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:70.0) Gecko/20100101 Firefox/70.0",
+            "X-Requested-With": "XMLHttpRequest",
+        }
 
         response = self.session.post(
             YGGTORRENT_URL_LOGIN, data=multipart_data, headers=headers
@@ -82,6 +93,8 @@ class YggTorrentScraper:
         logger.debug("status_code : %s", response.status_code)
 
         yggtorrent_token = None
+
+        print(response.status_code)
 
         if response.status_code == 200:
             logger.debug("Login successful")
@@ -92,6 +105,8 @@ class YggTorrentScraper:
                 name=YGGTORRENT_TOKEN_COOKIE,
                 value=yggtorrent_token,
             )
+
+            print(yggtorrent_token)
 
             self.session.cookies.set_cookie(cookie)
 
@@ -428,3 +443,76 @@ def create_search_url(
     formated_search_url += do
 
     return formated_search_url
+
+
+def pretty_print_POST(req):
+    """
+    At this point it is completely built and ready
+    to be fired; it is "prepared".
+
+    However pay attention at the formatting used in
+    this function because it is programmed to be pretty
+    printed and may differ from the actual request.
+    """
+    print(
+        "{}\n{}\r\n{}\r\n\r\n{}".format(
+            "-----------START-----------",
+            req.method + " " + req.url,
+            "\r\n".join("{}: {}".format(k, v) for k, v in req.headers.items()),
+            req.body,
+        )
+    )
+
+
+if __name__ == "__main__":
+    multipart_data = MultipartEncoder(fields={"id": "aaa", "pass": "bbb"})
+
+    # headers = {"Content-Type": multipart_data.content_type}
+    headers = {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "User-Agent": "PostmanRuntime/7.17.1",
+        "Accept": "*/*",
+        "Cache-Control": "no-cache",
+        "Host": "www5.yggtorrent.pe",
+        "Accept-Encoding": "gzip, deflate",
+        "Connection": "keep-alive",
+    }
+
+    # req = requests.Request(YGGTORRENT_URL_LOGIN, multipart_data, headers=headers)
+    # prepared = req.prepare()
+
+    # pretty_print_POST(prepared)
+
+    response = requests.post(
+        YGGTORRENT_URL_LOGIN, data={"id": "Harkame", "pass": "fezrfze"}, headers=headers
+    )
+
+    # requests.post(url, data).text
+
+    # logger.debug("status_code : %s", response.status_code)
+
+    print(response.status_code)
+
+    # print(response.headers)
+
+    """""" """""" """""" """""" """""" """""" """""" """"""
+
+    exit()
+
+    scraper = YggTorrentScraper(requests.session())
+
+    print(YGGTORRENT_MOST_COMPLETED_URL)
+
+    # print(scraper.most_completed())
+
+    print(YGGTORRENT_URL_LOGIN)
+
+    scraper.login("aaaharkame573", "aaaPalavas34250")
+
+    exit()
+
+    scraper.download_from_torrent_url(
+        "https://www2.yggtorrent.pe/torrent/audio/musique/526709-hard+rock+pretty+maids+kingmaker+-+2016+mp3+à+320+kbs",
+        "./",
+    )
+    pass
