@@ -5,8 +5,6 @@ import re
 
 import requests
 from bs4 import BeautifulSoup
-from requests_toolbelt.multipart.encoder import MultipartEncoder
-
 from .torrent import Torrent, TorrentComment, TorrentFile
 
 YGGTORRENT_TLD = "pe"
@@ -472,24 +470,3 @@ def create_search_url(
     formated_search_url += do
 
     return formated_search_url
-
-if __name__ == "__main__":
-    scraper = YggTorrentScraper(requests.session(), yggtorrent_tld="gg")
-
-    change_yggtorrent_tld("grogrl")
-
-    print(YGGTORRENT_TLD)
-
-    print(YGGTORRENT_LOGIN_URL)
-
-    exit()
-
-    if(scraper.login("gregre", "greg")):
-        print("Login success")
-
-        scraper.download_from_torrent_url(
-            "https://www2.yggtorrent.pe/torrent/audio/musique/526709-hard+rock+pretty+maids+kingmaker+-+2016+mp3+à+320+kbs",
-            "./",
-        )
-    else:
-        print("Login failed")
