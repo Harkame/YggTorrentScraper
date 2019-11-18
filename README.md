@@ -58,6 +58,8 @@ Session is requiered to download torrent
 
 ### Login (optionnal)
 
+**I highly recommend you to not use your main account, YggTorrent ban bots**
+
 Requiered only for download torrent's file
 
 ``` python
