@@ -5,6 +5,7 @@ import re
 
 import requests
 from bs4 import BeautifulSoup
+
 from .torrent import Torrent, TorrentComment, TorrentFile
 
 YGGTORRENT_TLD = "pe"
