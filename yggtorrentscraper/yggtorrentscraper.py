@@ -7,7 +7,7 @@ import requests
 from bs4 import BeautifulSoup
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 
-from torrent import Torrent, TorrentComment, TorrentFile
+from .torrent import Torrent, TorrentComment, TorrentFile
 
 __all__ = ["YggTorrentScraper", "YGGTORRENT_TLD", "YGGTORRENT_BASE_URL"]
 
@@ -443,76 +443,3 @@ def create_search_url(
     formated_search_url += do
 
     return formated_search_url
-
-
-def pretty_print_POST(req):
-    """
-    At this point it is completely built and ready
-    to be fired; it is "prepared".
-
-    However pay attention at the formatting used in
-    this function because it is programmed to be pretty
-    printed and may differ from the actual request.
-    """
-    print(
-        "{}\n{}\r\n{}\r\n\r\n{}".format(
-            "-----------START-----------",
-            req.method + " " + req.url,
-            "\r\n".join("{}: {}".format(k, v) for k, v in req.headers.items()),
-            req.body,
-        )
-    )
-
-
-if __name__ == "__main__":
-    multipart_data = MultipartEncoder(fields={"id": "aaa", "pass": "bbb"})
-
-    # headers = {"Content-Type": multipart_data.content_type}
-    headers = {
-        "Content-Type": "application/x-www-form-urlencoded",
-        "User-Agent": "PostmanRuntime/7.17.1",
-        "Accept": "*/*",
-        "Cache-Control": "no-cache",
-        "Host": "www5.yggtorrent.pe",
-        "Accept-Encoding": "gzip, deflate",
-        "Connection": "keep-alive",
-    }
-
-    # req = requests.Request(YGGTORRENT_URL_LOGIN, multipart_data, headers=headers)
-    # prepared = req.prepare()
-
-    # pretty_print_POST(prepared)
-
-    response = requests.post(
-        YGGTORRENT_URL_LOGIN, data={"id": "Harkame", "pass": "fezrfze"}, headers=headers
-    )
-
-    # requests.post(url, data).text
-
-    # logger.debug("status_code : %s", response.status_code)
-
-    print(response.status_code)
-
-    # print(response.headers)
-
-    """""" """""" """""" """""" """""" """""" """""" """"""
-
-    exit()
-
-    scraper = YggTorrentScraper(requests.session())
-
-    print(YGGTORRENT_MOST_COMPLETED_URL)
-
-    # print(scraper.most_completed())
-
-    print(YGGTORRENT_URL_LOGIN)
-
-    scraper.login("aaaharkame573", "aaaPalavas34250")
-
-    exit()
-
-    scraper.download_from_torrent_url(
-        "https://www2.yggtorrent.pe/torrent/audio/musique/526709-hard+rock+pretty+maids+kingmaker+-+2016+mp3+à+320+kbs",
-        "./",
-    )
-    pass
