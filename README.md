@@ -62,7 +62,10 @@ Requiered only for download torrent's file
 
 ``` python
 
-scraper.login(identifiant='myidentifiant', password='mypassword')
+if(scraper.login('myidentifiant', 'mypassword')):
+    print("Login success")
+else:
+    print("Login failed")
 
 ```
 
@@ -170,19 +173,24 @@ Text   : Merci c'est cool !
 
 ### Download
 
-Download torrent's file (.torrent)
+Download torrent's file (.torrent), requiered to be logged
 
 ``` python
 
-torrent = scraper.extract_details('https://www2.yggtorrent.ch/torrent/filmvideo/serie-tv/440445-game-of-thrones-s08e02-multi-1080p-amzn-web-dl-dd5-1-x264-ark01')
+if(scraper.login('myidentifiant', 'mypassword')):
+    print("Login success")
 
-scraper.download_from_torrent(torrent)
+    torrent = scraper.extract_details('https://www2.yggtorrent.ch/torrent/filmvideo/serie-tv/440445-game-of-thrones-s08e02-multi-1080p-amzn-web-dl-dd5-1-x264-ark01')
 
-'''
-OR
-'''
+    scraper.download_from_torrent(torrent)
 
-scraper.download_from_torrent_url('https://www2.yggtorrent.ch/torrent/filmvideo/serie-tv/440445-game-of-thrones-s08e02-multi-1080p-amzn-web-dl-dd5-1-x264-ark01')
+    '''
+    OR
+    '''
+
+    scraper.download_from_torrent_url('https://www2.yggtorrent.ch/torrent/filmvideo/serie-tv/440445-game-of-thrones-s08e02-multi-1080p-amzn-web-dl-dd5-1-x264-ark01')
+else:
+    print("Login failed")
 
 ```
 
