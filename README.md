@@ -41,6 +41,19 @@ scraper = YggTorrentScraper(requests.session())
 
 ```
 
+#### Change TLD
+
+YggTorrent TLD is change regularly, you can specify it at YggTorrentScraper construction with optionnal parameters yggtorrent_tld
+
+``` python
+
+import requests
+from yggtorrentscraper import YggTorrentScraper
+
+scraper = YggTorrentScraper(requests.session(), yggtorrent_tld="new_tld")
+
+```
+
 Session is requiered to download torrent
 
 ### Login (optionnal)

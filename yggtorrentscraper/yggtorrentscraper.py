@@ -7,25 +7,21 @@ import requests
 from bs4 import BeautifulSoup
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 
-from torrent import Torrent, TorrentComment, TorrentFile
-
-__all__ = ["YggTorrentScraper", "YGGTORRENT_TLD", "YGGTORRENT_BASE_URL"]
+from .torrent import Torrent, TorrentComment, TorrentFile
 
 YGGTORRENT_TLD = "pe"
 
 YGGTORRENT_BASE_URL = f"https://www2.yggtorrent.{YGGTORRENT_TLD}"
 
-YGGTORRENT_URL_LOGIN = f"{YGGTORRENT_BASE_URL}/user/login"
-YGGTORRENT_URL_LOGOUT = f"{YGGTORRENT_BASE_URL}/user/logout"
+YGGTORRENT_LOGIN_URL = f"{YGGTORRENT_BASE_URL}/user/login"
+YGGTORRENT_SEARCH_URL = f"{YGGTORRENT_BASE_URL}/user/logout"
+
+YGGTORRENT_SEARCH_URL = f"{YGGTORRENT_BASE_URL}/engine/search?name="
 
 logger = logging.getLogger("yggtorrentscraper")
 
-YGGTORRENT_DOMAIN = ".yggtorrent.gg"
+YGGTORRENT_DOMAIN = f".yggtorrent.{YGGTORRENT_TLD}"
 YGGTORRENT_TOKEN_COOKIE = "ygg_"
-
-YGGTORRENT_SEARCH_URL = f"{YGGTORRENT_BASE_URL}/engine/search?name="
-
-YGGTORRENT_SEARCH_URL = f"{YGGTORRENT_BASE_URL}/engine/search?name="
 
 YGGTORRENT_SEARCH_URL_DESCRIPTION = "&description="
 YGGTORRENT_SEARCH_URL_FILE = "&file="
@@ -56,6 +52,39 @@ TORRENT_PER_PAGE = 50
 
 YGGTORRENT_FILES_URL = f"{YGGTORRENT_BASE_URL}/engine/get_files?torrent="
 
+def change_yggtorrent_tld(yggtorrent_tld=None):
+    """
+    Redefine all string variable according to new TLD
+    """
+
+    global YGGTORRENT_TLD
+    global YGGTORRENT_BASE_URL
+    global YGGTORRENT_LOGIN_URL
+    global YGGTORRENT_SEARCH_URL
+    global YGGTORRENT_DOMAIN
+    global YGGTORRENT_GET_FILES
+    global YGGTORRENT_GET_INFO
+    global YGGTORRENT_MOST_COMPLETED_URL
+    global YGGTORRENT_FILES_URL
+
+    YGGTORRENT_TLD = yggtorrent_tld
+
+    YGGTORRENT_BASE_URL = f"https://www2.yggtorrent.{YGGTORRENT_TLD}"
+
+    YGGTORRENT_LOGIN_URL = f"{YGGTORRENT_BASE_URL}/user/login"
+    YGGTORRENT_SEARCH_URL = f"{YGGTORRENT_BASE_URL}/user/logout"
+
+    YGGTORRENT_SEARCH_URL = f"{YGGTORRENT_BASE_URL}/engine/search?name="
+
+    YGGTORRENT_DOMAIN = ".yggtorrent.gg"
+
+    YGGTORRENT_GET_FILES = f"{YGGTORRENT_BASE_URL}/engine/get_files?torrent="
+    YGGTORRENT_GET_INFO = f"https://www2.yggtorrentchg/engine/get_nfo?torrent="
+
+    YGGTORRENT_MOST_COMPLETED_URL = f"{YGGTORRENT_BASE_URL}/engine/mostcompleted"
+
+    YGGTORRENT_FILES_URL = f"{YGGTORRENT_BASE_URL}/engine/get_files?torrent="
+
 
 class YggTorrentScraper:
     session = None
@@ -64,7 +93,7 @@ class YggTorrentScraper:
         self.session = session
 
         if yggtorrent_tld is not None:
-            YGGTORRENT_TLD = yggtorrent_tld
+            change_yggtorrent_tld(yggtorrent_tld)
 
     def login(self, identifiant, password):
         """
@@ -72,29 +101,23 @@ class YggTorrentScraper:
         """
         self.session.cookies.clear()
 
-        multipart_data = MultipartEncoder({"id": identifiant, "pass": password})
-
         headers = {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "User-Agent": "PostmanRuntime/7.17.1",
             "Accept": "*/*",
-            "Accept-Encoding": "gzip, deflate, br",
-            "Accept-Language": "fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3",
-            "Connection": "keep-alive",
-            "Content-Type": "multipart/form-data; boundary=---------------------------255191561306",
+            "Cache-Control": "no-cache",
             "Host": "www5.yggtorrent.pe",
-            "TE": "Trailers",
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:70.0) Gecko/20100101 Firefox/70.0",
-            "X-Requested-With": "XMLHttpRequest",
+            "Accept-Encoding": "gzip, deflate",
+            "Connection": "keep-alive",
         }
 
         response = self.session.post(
-            YGGTORRENT_URL_LOGIN, data=multipart_data, headers=headers
+            YGGTORRENT_LOGIN_URL, data={"id": identifiant, "pass": password}, headers=headers
         )
 
         logger.debug("status_code : %s", response.status_code)
 
         yggtorrent_token = None
-
-        print(response.status_code)
 
         if response.status_code == 200:
             logger.debug("Login successful")
@@ -105,8 +128,6 @@ class YggTorrentScraper:
                 name=YGGTORRENT_TOKEN_COOKIE,
                 value=yggtorrent_token,
             )
-
-            print(yggtorrent_token)
 
             self.session.cookies.set_cookie(cookie)
 
@@ -120,7 +141,7 @@ class YggTorrentScraper:
         """
         Logout request
         """
-        response = self.session.get(YGGTORRENT_URL_LOGOUT)
+        response = self.session.get(YGGTORRENT_SEARCH_URL)
 
         self.session.cookies.clear()
 
@@ -355,13 +376,21 @@ class YggTorrentScraper:
 
         return torrents
 
-    def download_from_torrent(self, torrent=None, destination_path="./"):
-        if torrent is not None:
-            return self.download_from_torrent_url(
+    def download_from_torrent_url(self, torrent_url=None, destination_path="./"):
+        if torrent_url is not None:
+            torrent = self.extract_details(torrent_url)
+
+            return self.download_from_torrent_download_url(
                 torrent_url=torrent.url, destination_path=destination_path
             )
 
-    def download_from_torrent_url(self, torrent_url=None, destination_path="./"):
+    def download_from_torrent(self, torrent=None, destination_path="./"):
+        if torrent is not None:
+            return self.download_from_torrent_download_url(
+                torrent_url=torrent.url, destination_path=destination_path
+            )
+
+    def download_from_torrent_download_url(self, torrent_url=None, destination_path="./"):
         response = self.session.get(YGGTORRENT_BASE_URL + torrent_url)
 
         temp_file_name = response.headers.get("content-disposition")
@@ -444,75 +473,23 @@ def create_search_url(
 
     return formated_search_url
 
-
-def pretty_print_POST(req):
-    """
-    At this point it is completely built and ready
-    to be fired; it is "prepared".
-
-    However pay attention at the formatting used in
-    this function because it is programmed to be pretty
-    printed and may differ from the actual request.
-    """
-    print(
-        "{}\n{}\r\n{}\r\n\r\nBody : {}".format(
-            "-----------START-----------",
-            req.method + " " + req.url,
-            "\r\n".join("{}: {}".format(k, v) for k, v in req.headers.items()),
-            req.body,
-        )
-    )
-
-
 if __name__ == "__main__":
-    # headers = {"Content-Type": multipart_data.content_type}
-    headers = {
-        "Content-Type": "application/x-www-form-urlencoded",
-        "User-Agent": "PostmanRuntime/7.17.1",
-        "Accept": "*/*",
-        "Cache-Control": "no-cache",
-        "Host": "www5.yggtorrent.pe",
-        "Accept-Encoding": "gzip, deflate",
-        "Content-Length": "21",
-        "Connection": "keep-alive",
-    }
+    scraper = YggTorrentScraper(requests.session(), yggtorrent_tld="gg")
 
-    data = {"id": "Harkame", "pass": "fezrfze"}
-    multipart_data = MultipartEncoder(fields=data)
+    change_yggtorrent_tld("grogrl")
 
-    req = requests.Request(YGGTORRENT_URL_LOGIN, data, headers=headers)
-    prepared = req.prepare()
+    print(YGGTORRENT_TLD)
 
-    pretty_print_POST(prepared)
-
-    response = requests.post(YGGTORRENT_URL_LOGIN, data=data, headers=headers)
-
-    # requests.post(url, data).text
-
-    # logger.debug("status_code : %s", response.status_code)
-
-    print(response.status_code)
-
-    # print(response.headers)
-
-    """""" """""" """""" """""" """""" """""" """""" """"""
+    print(YGGTORRENT_LOGIN_URL)
 
     exit()
 
-    scraper = YggTorrentScraper(requests.session())
+    if(scraper.login("gregre", "greg")):
+        print("Login success")
 
-    print(YGGTORRENT_MOST_COMPLETED_URL)
-
-    # print(scraper.most_completed())
-
-    print(YGGTORRENT_URL_LOGIN)
-
-    scraper.login("aaaharkame573", "aaaPalavas34250")
-
-    exit()
-
-    scraper.download_from_torrent_url(
-        "https://www2.yggtorrent.pe/torrent/audio/musique/526709-hard+rock+pretty+maids+kingmaker+-+2016+mp3+à+320+kbs",
-        "./",
-    )
-    pass
+        scraper.download_from_torrent_url(
+            "https://www2.yggtorrent.pe/torrent/audio/musique/526709-hard+rock+pretty+maids+kingmaker+-+2016+mp3+à+320+kbs",
+            "./",
+        )
+    else:
+        print("Login failed")
