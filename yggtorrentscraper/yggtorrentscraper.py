@@ -455,7 +455,7 @@ def pretty_print_POST(req):
     printed and may differ from the actual request.
     """
     print(
-        "{}\n{}\r\n{}\r\n\r\n{}".format(
+        "{}\n{}\r\n{}\r\n\r\nBody : {}".format(
             "-----------START-----------",
             req.method + " " + req.url,
             "\r\n".join("{}: {}".format(k, v) for k, v in req.headers.items()),
@@ -465,8 +465,6 @@ def pretty_print_POST(req):
 
 
 if __name__ == "__main__":
-    multipart_data = MultipartEncoder(fields={"id": "aaa", "pass": "bbb"})
-
     # headers = {"Content-Type": multipart_data.content_type}
     headers = {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -475,17 +473,19 @@ if __name__ == "__main__":
         "Cache-Control": "no-cache",
         "Host": "www5.yggtorrent.pe",
         "Accept-Encoding": "gzip, deflate",
+        "Content-Length": "21",
         "Connection": "keep-alive",
     }
 
-    # req = requests.Request(YGGTORRENT_URL_LOGIN, multipart_data, headers=headers)
-    # prepared = req.prepare()
+    data = {"id": "Harkame", "pass": "fezrfze"}
+    multipart_data = MultipartEncoder(fields=data)
 
-    # pretty_print_POST(prepared)
+    req = requests.Request(YGGTORRENT_URL_LOGIN, data, headers=headers)
+    prepared = req.prepare()
 
-    response = requests.post(
-        YGGTORRENT_URL_LOGIN, data={"id": "Harkame", "pass": "fezrfze"}, headers=headers
-    )
+    pretty_print_POST(prepared)
+
+    response = requests.post(YGGTORRENT_URL_LOGIN, data=data, headers=headers)
 
     # requests.post(url, data).text
 
