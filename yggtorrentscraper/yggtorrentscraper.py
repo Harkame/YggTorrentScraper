@@ -106,7 +106,7 @@ class YggTorrentScraper:
             "User-Agent": "PostmanRuntime/7.17.1",
             "Accept": "*/*",
             "Cache-Control": "no-cache",
-            "Host": "www5.yggtorrent.pe",
+            "Host": f"www5.yggtorrent.{YGGTORRENT_TLD}",
             "Accept-Encoding": "gzip, deflate",
             "Connection": "keep-alive",
         }
