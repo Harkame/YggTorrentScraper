@@ -45,18 +45,18 @@ class TestDownload(unittest.TestCase):
 
         self.assertTrue(os.path.getsize(file_full_path) > 1000)
 
-        def test_download_from_torrent_download_url(self):
-            most_completed = self.scraper.most_completed()
+    def test_download_from_torrent_download_url(self):
+        most_completed = self.scraper.most_completed()
 
-            torrent = self.scraper.extract_details(most_completed[0])
+        torrent = self.scraper.extract_details(most_completed[0])
 
-            self.assertTrue(torrent.url is not None)
+        self.assertTrue(torrent.url is not None)
 
-            file_full_path = self.scraper.download_from_torrent_download_url(
-                torrent_url=torrent.url, destination_path=self.destination_path
-            )
+        file_full_path = self.scraper.download_from_torrent_download_url(
+            torrent_url=torrent.url, destination_path=self.destination_path
+        )
 
-            self.assertTrue(os.path.getsize(file_full_path) > 1000)
+        self.assertTrue(os.path.getsize(file_full_path) > 1000)
 
     def tearDown(self):
         if os.path.exists(self.destination_path):
