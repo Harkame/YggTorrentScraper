@@ -89,11 +89,8 @@ def change_yggtorrent_tld(yggtorrent_tld=None):
 class YggTorrentScraper:
     session = None
 
-    def __init__(self, session, yggtorrent_tld=None):
+    def __init__(self, session):
         self.session = session
-
-        if yggtorrent_tld is not None:
-            change_yggtorrent_tld(yggtorrent_tld)
 
     def login(self, identifiant, password):
         """
@@ -158,40 +155,10 @@ class YggTorrentScraper:
 
             return False
 
-    def search(
-        self,
-        name=None,
-        category="all",
-        sub_category=None,
-        descriptions=None,
-        files=None,
-        uploader=None,
-        sort="publish_date",
-        order="asc",
-    ):
+    def search(self, parameters):
+        search_url = create_search_url(parameters)
 
-        search_url = create_search_url(
-            name=name,
-            category=category,
-            sub_category=sub_category,
-            descriptions=descriptions,
-            files=files,
-            uploader=uploader,
-            sort=sort,
-            order=order,
-        )
-
-        torrents_url = self.get_torrents_url(
-            search_url=search_url,
-            name=name,
-            category=category,
-            sub_category=sub_category,
-            descriptions=descriptions,
-            files=files,
-            uploader=uploader,
-            sort=sort,
-            order=order,
-        )
+        torrents_url = self.get_torrents_url(search_url, parameters)
 
         return torrents_url
 
@@ -321,20 +288,7 @@ class YggTorrentScraper:
 
         return torrents_url
 
-    def get_torrents_url(
-        self,
-        search_url="",
-        name=None,
-        category="all",
-        sub_category=None,
-        descriptions=None,
-        files=None,
-        uploader=None,
-        sort="date",
-        order="asc",
-        page=0,
-        do="search",
-    ):
+    def get_torrents_url(self, search_url, parameters):
         """
         Return
         """
@@ -355,17 +309,9 @@ class YggTorrentScraper:
         torrents = []
 
         for page in range(0, limit_page):
-            search_url = create_search_url(
-                name=name,
-                category=category,
-                sub_category=sub_category,
-                descriptions=descriptions,
-                files=files,
-                uploader=uploader,
-                sort=sort,
-                order=order,
-                page=page * TORRENT_PER_PAGE,
-            )
+            parameters["page"] = page * TORRENT_PER_PAGE
+
+            search_url = create_search_url(parameters)
 
             response = self.session.get(search_url)
 
@@ -395,6 +341,9 @@ class YggTorrentScraper:
     def download_from_torrent_download_url(
         self, torrent_url=None, destination_path="./"
     ):
+        if torrent_url is None:
+            raise Exception("Invalid torrent_url, make sure you are logged")
+
         response = self.session.get(YGGTORRENT_BASE_URL + torrent_url)
 
         temp_file_name = response.headers.get("content-disposition")
@@ -415,64 +364,55 @@ class YggTorrentScraper:
         return file_full_path
 
 
-def create_search_url(
-    name=None,
-    category="all",
-    sub_category=None,
-    descriptions=None,
-    files=None,
-    uploader=None,
-    sort="publish_date",
-    order="asc",
-    page=0,
-    do="search",
-):
+def create_search_url(parameters):
     """
     Return a formated URL for torrent's search
     """
 
     formated_search_url = YGGTORRENT_SEARCH_URL
 
-    if name is not None:
-        formated_search_url += name
+    if "name" in parameters:
+        formated_search_url += parameters["name"]
 
-    formated_search_url += YGGTORRENT_SEARCH_URL_CATEGORY
-    formated_search_url += category
+    if "category" in parameters:
+        formated_search_url += YGGTORRENT_SEARCH_URL_CATEGORY
+        formated_search_url += parameters["category"]
 
-    formated_search_url += YGGTORRENT_SEARCH_URL_SUB_CATEGORY
-    if sub_category is not None:
-        formated_search_url += sub_category
+    if "sub_category" in parameters:
+        formated_search_url += YGGTORRENT_SEARCH_URL_SUB_CATEGORY
+        formated_search_url += parameters["sub_category"]
 
-    if page > 0:
+    if "page" in parameters:
         formated_search_url += YGGTORRENT_SEARCH_URL_PAGE
-        formated_search_url += str(page)
+        formated_search_url += str(parameters["page"])
 
-    if descriptions is not None:
+    if "descriptions" in parameters:
         formated_search_url += YGGTORRENT_SEARCH_URL_DESCRIPTION
 
-        for description in descriptions:
+        for description in parameters["descriptions"]:
             formated_search_url += description
             formated_search_url += "+"
 
-    if files is not None:
+    if "files" in parameters:
         formated_search_url += YGGTORRENT_SEARCH_URL_FILE
 
-        for file in files:
+        for file in paramters["files"]:
             formated_search_url += file
             formated_search_url += "+"
 
-    if uploader is not None:
+    if "uploader" in parameters:
         formated_search_url += YGGTORRENT_SEARCH_URL_UPLOADER
+        formated_search_url += parameters["uploader"]
 
-        formated_search_url += uploader
+    if "sort" in parameters:
+        formated_search_url += YGGTORRENT_SEARCH_URL_SORT
+        formated_search_url += parameters["sort"]
 
-    formated_search_url += YGGTORRENT_SEARCH_URL_SORT
-    formated_search_url += sort
-
-    formated_search_url += YGGTORRENT_SEARCH_URL_ORDER
-    formated_search_url += order
+    if "order" in parameters:
+        formated_search_url += YGGTORRENT_SEARCH_URL_ORDER
+        formated_search_url += parameters["order"]
 
     formated_search_url += YGGTORRENT_SEARCH_URL_DO
-    formated_search_url += do
+    formated_search_url += "search"
 
     return formated_search_url

@@ -66,22 +66,22 @@ Requiered only for download torrent's file
 
 ``` python
 
-if(scraper.login('myidentifiant', 'mypassword')):
+if(scraper.login("myidentifiant", "mypassword")):
     print("Login success")
 else:
     print("Login failed")
 
 ```
 
-### Research an torrent
+### Search torrents
 
-Return url's results torrent for specified research
+Return url's results torrent for specified search
 
 ``` python
 
-research = scraper.search(name='walking dead s08')
+research = scraper.search({name : "walking dead s08"})
 
-'''
+"""
 
 https://www2.yggtorrent.ch/torrent/filmvid▒o/s▒rie-tv/227730-the+walking+dead+s08+complete+vostfr+proper+720p+hdtv+x264-expm5
 https://www2.yggtorrent.ch/torrent/filmvid▒o/s▒rie-tv/227752-the+walking+dead+s08+complete+vostfr+proper+hdtv+xvid-expm5
@@ -91,7 +91,32 @@ https://www2.yggtorrent.ch/torrent/filmvid▒o/s▒rie-tv/227765-the+walking+dea
 
 ...
 
-'''
+"""
+
+```
+
+#### Search an torrents by uploader
+
+Return url's results torrent for specified search
+
+``` python
+
+research = scraper.search({name : "walking dead s09", "uploader" : 'brandit'})
+
+```
+
+#### Search torrents with sorted results
+
+Return url's results torrent for specified search
+
+** YggTorrent's sorting is bugged, in general the results are sorted but sometimes you can find some torrents at a wrong position**
+
++   sort : name/publish_date/size/completed/seed/leech
++   order : asc/desc
+
+``` python
+
+research = scraper.search({"name": "blue oyster cult", "sort": "completed", "order": "desc"})
 
 ```
 
@@ -103,7 +128,7 @@ Return url's of most completed (top 100) downloaded torrents
 
 most_completed = scraper.most_completed()
 
-'''
+"""
 
 https://www2.yggtorrent.ch/torrent/filmvideo/serie-tv/440445-game-of-thrones-s08e02-multi-1080p-amzn-web-dl-dd5-1-x264-ark01
 https://www2.yggtorrent.ch/torrent/application/windows/316475-microsoft-toolkit-v2-6-4-activateur-office-2016---2019-windows-10
@@ -113,7 +138,7 @@ https://www2.yggtorrent.ch/torrent/filmvideo/serie-tv/436928-game-of-thrones-s08
 
 ...
 
-'''
+"""
 
 ```
 
@@ -126,7 +151,7 @@ torrent = scraper.extract_details('https://www2.yggtorrent.ch/torrent/filmvideo/
 
 print(torrent)
 
-'''
+"""
 
 Name      : Game.of.Thrones.S08E02.MULTi.1080p.AMZN.WEB-DL.DD5.1.x264-ARK01
 Url       : N/A (Not authentified)
@@ -141,11 +166,11 @@ Files (1) :
 
 Comments (15) :
 
-'''
+"""
 
 print(torrent.__str__(files=True, comments=True))
 
-'''
+"""
 Name      : Game.of.Thrones.S08E02.MULTi.1080p.AMZN.WEB-DL.DD5.1.x264-ARK01
 Url       : N/A
 Uploaded  : 2019-04-22 06:10:00
@@ -171,7 +196,7 @@ Text   : Merci c'est cool !
 
 ...
 
-'''
+"""
 
 ```
 
@@ -181,16 +206,16 @@ Download torrent's file (.torrent), requiered to be logged
 
 ``` python
 
-if(scraper.login('myidentifiant', 'mypassword')):
+if(scraper.login("myidentifiant", "mypassword")):
     print("Login success")
 
     torrent = scraper.extract_details('https://www2.yggtorrent.ch/torrent/filmvideo/serie-tv/440445-game-of-thrones-s08e02-multi-1080p-amzn-web-dl-dd5-1-x264-ark01')
 
     scraper.download_from_torrent(torrent)
 
-    '''
+    """
     OR
-    '''
+    """
 
     scraper.download_from_torrent_url('https://www2.yggtorrent.ch/torrent/filmvideo/serie-tv/440445-game-of-thrones-s08e02-multi-1080p-amzn-web-dl-dd5-1-x264-ark01')
 else:
@@ -205,6 +230,11 @@ else:
 scraper.logout()
 
 ```
+
+## TODO
+
++   search : category, sub_category, descriptions and files
++   More tests, find non bugged search (especially for sort test)
 
 ## Test
 
