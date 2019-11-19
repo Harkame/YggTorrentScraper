@@ -109,7 +109,7 @@ research = scraper.search({name : "walking dead s09", "uploader" : 'brandit'})
 
 Return url's results torrent for specified search
 
-** YggTorrent's sorting is bugged, in general the results are sorted but sometimes you can find some torrents at a wrong position**
+**YggTorrent's sorting is bugged, in general the results are sorted but sometimes you can find some torrents at a wrong position**
 
 +   sort : name/publish_date/size/completed/seed/leech
 +   order : asc/desc
