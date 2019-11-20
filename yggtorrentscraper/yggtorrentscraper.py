@@ -396,7 +396,7 @@ def create_search_url(parameters):
     if "files" in parameters:
         formated_search_url += YGGTORRENT_SEARCH_URL_FILE
 
-        for file in paramters["files"]:
+        for file in parameters["files"]:
             formated_search_url += file
             formated_search_url += "+"
 
