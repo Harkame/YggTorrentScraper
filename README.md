@@ -234,7 +234,7 @@ scraper.logout()
 
 ## TODO
 
-+   search : category, sub_category, descriptions and files
++   search : language, category, sub_category, descriptions and files
 +   More tests, find non bugged search (especially for sort tests)
 +   Fix TLD tests
 
