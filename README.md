@@ -1,5 +1,6 @@
 # YggTorrentScraper
 
+[![PyPI version](https://badge.fury.io/py/yggtorrentscraper.svg)](https://badge.fury.io/py/yggtorrentscraper)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/2d860dc88dfa467eb07105f559ba352a)](https://www.codacy.com/app/Harkame/YggTorrentScraper?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Harkame/YggTorrentScraper&amp;utm_campaign=Badge_Grade)
 [![Maintainability](https://api.codeclimate.com/v1/badges/341218ef79de77052e43/maintainability)](https://codeclimate.com/github/Harkame/YggTorrentScraper/maintainability)
 [![Build Status](https://travis-ci.org/Harkame/YggTorrentScraper.svg?branch=master)](https://travis-ci.org/Harkame/YggTorrentScraper)
