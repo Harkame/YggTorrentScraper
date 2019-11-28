@@ -1,7 +1,5 @@
 import unittest
 
-import requests
-
 from ..yggtorrentscraper import YggTorrentScraper, YGGTORRENT_TLD, change_yggtorrent_tld
 
 
