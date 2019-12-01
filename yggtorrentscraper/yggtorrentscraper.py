@@ -51,6 +51,64 @@ TORRENT_PER_PAGE = 50
 
 YGGTORRENT_FILES_URL = f"{YGGTORRENT_BASE_URL}/engine/get_files?torrent="
 
+categories = {
+    "All": "all",
+    "Film_Video": "2145",
+    "Application": "2139",
+    "Jeu_video": "2142",
+    "eBook": "2140",
+    "Emulation": "2141",
+    "GPS": "2143",
+}
+
+sub_categories = {
+    "All": "all",
+    "Animation": "2178",
+    "Animation Serie": "2179",
+    "Concert": "2180",
+    "Documentaire": "2181",
+    "Emission TV": "2182",
+    "Film": "2183",
+    "Serie TV": "2184",
+    "Spectacle": "2185",
+    "Sport": "2186",
+    "Video-clips": "2187",
+    "Karaoke": "2147",
+    "Musique": "2148",
+    "Podcast Radio": "2150",
+    "Samples": "2149",
+    "Autre": "2177",
+    "Formation": "2176",
+    "Linux": "2171",
+    "MacOS": "2172",
+    "Smartphone": "2174",
+    "Tablette": "2175",
+    "Windows": "2173",
+    "Autre": "2167",
+    "Linux": "2159",
+    "MacOS": "2160",
+    "Microsoft": "2162",
+    "Nintendo": "2163",
+    "Smartphone": "2165",
+    "Sony": "2164",
+    "Tablette": "2166",
+    "Windows": "2161",
+    "Audio": "2151",
+    "Bds": "2152",
+    "Comics": "2153",
+    "Livres": "2154",
+    "Mangas": "2155",
+    "Presse": "2156",
+    "Emulateurs": "2157",
+    "Roms": "2158",
+    "Applications": "2168",
+    "Cartes": "2169",
+    "Divers": "2170",
+    "Films": "2189",
+    "Hentai": "2190",
+    "Images": "2191",
+}
+
 
 def change_yggtorrent_tld(yggtorrent_tld=None):
     """
