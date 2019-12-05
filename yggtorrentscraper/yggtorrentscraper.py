@@ -2,11 +2,13 @@ import datetime
 import logging
 import os
 import re
+import sys
 
 import requests
 from bs4 import BeautifulSoup
 
-from .torrent import Torrent, TorrentComment, TorrentFile
+from torrent import Torrent, TorrentComment, TorrentFile
+from categories import categories
 
 YGGTORRENT_TLD = "ws"
 
@@ -50,64 +52,6 @@ YGGTORRENT_MOST_COMPLETED_URL = f"{YGGTORRENT_BASE_URL}/engine/mostcompleted"
 TORRENT_PER_PAGE = 50
 
 YGGTORRENT_FILES_URL = f"{YGGTORRENT_BASE_URL}/engine/get_files?torrent="
-
-categories = {
-    "All": "all",
-    "Film_Video": "2145",
-    "Application": "2139",
-    "Jeu_video": "2142",
-    "eBook": "2140",
-    "Emulation": "2141",
-    "GPS": "2143",
-}
-
-sub_categories = {
-    "All": "all",
-    "Animation": "2178",
-    "Animation Serie": "2179",
-    "Concert": "2180",
-    "Documentaire": "2181",
-    "Emission TV": "2182",
-    "Film": "2183",
-    "Serie TV": "2184",
-    "Spectacle": "2185",
-    "Sport": "2186",
-    "Video-clips": "2187",
-    "Karaoke": "2147",
-    "Musique": "2148",
-    "Podcast Radio": "2150",
-    "Samples": "2149",
-    "Autre": "2177",
-    "Formation": "2176",
-    "Linux": "2171",
-    "MacOS": "2172",
-    "Smartphone": "2174",
-    "Tablette": "2175",
-    "Windows": "2173",
-    "Autre": "2167",
-    "Linux": "2159",
-    "MacOS": "2160",
-    "Microsoft": "2162",
-    "Nintendo": "2163",
-    "Smartphone": "2165",
-    "Sony": "2164",
-    "Tablette": "2166",
-    "Windows": "2161",
-    "Audio": "2151",
-    "Bds": "2152",
-    "Comics": "2153",
-    "Livres": "2154",
-    "Mangas": "2155",
-    "Presse": "2156",
-    "Emulateurs": "2157",
-    "Roms": "2158",
-    "Applications": "2168",
-    "Cartes": "2169",
-    "Divers": "2170",
-    "Films": "2189",
-    "Hentai": "2190",
-    "Images": "2191",
-}
 
 
 def change_yggtorrent_tld(yggtorrent_tld=None):
@@ -470,7 +414,59 @@ def create_search_url(parameters):
         formated_search_url += YGGTORRENT_SEARCH_URL_ORDER
         formated_search_url += parameters["order"]
 
+        id_category = "all"
+        id_subcategory = "all"
+        fields_index = []
+
+    id_category = ""
+    id_subcategory = ""
+    fields_index = []
+
+    if "category" in parameters:
+        for category in categories:
+            if parameters["category"] == category["name"]:
+                formated_search_url += YGGTORRENT_SEARCH_URL_CATEGORY
+                formated_search_url += category["id"]
+
+                if "subcategory" in parameters:
+                    for subcategory in category["subcategories"]:
+                        if parameters["subcategory"] == subcategory["name"]:
+                            formated_search_url += YGGTORRENT_SEARCH_URL_SUB_CATEGORY
+                            formated_search_url += subcategory["id"]
+                            if "fields" in parameters:
+                                for key, values in parameters["fields"].items():
+                                    for field in subcategory["fields"]:
+                                        if key == field["name"]:
+                                            for searched_value in values:
+                                                for index, value in enumerate(
+                                                    field["values"]
+                                                ):
+                                                    if searched_value == value:
+                                                        fields_index.append(index)
+
     formated_search_url += YGGTORRENT_SEARCH_URL_DO
     formated_search_url += "search"
 
     return formated_search_url
+
+
+"""
+https://www2.yggtorrent.ws/engine/search?name=walking+dead&description=&file=&uploader=&category=2145&sub_category=2184&do=search
+https://www2.yggtorrent.ws/engine/search?name=walking+dead&description=&file=&uploader=&category=2145&sub_category=2178&option_langue%3Amultiple[]=1&do=search
+https://www2.yggtorrent.ws/engine/search?name=walking+dead&description=&file=&uploader=&category=2145&sub_category=2178&option_langue%3Amultiple[]=2&do=search
+https://www2.yggtorrent.ws/engine/search?name=walking+dead&description=&file=&uploader=&category=2145&sub_category=2178&option_langue%3Amultiple[]=1&option_langue%3Amultiple[]=2&do=search
+
+"""
+if __name__ == "__main__":
+    scraper = YggTorrentScraper(requests.session())
+
+    search_url = create_search_url(
+        {
+            "name": "walking dead",
+            "category": "films_&_videos",
+            "subcategory": "animation",
+            "fields": {"langue": {"anglais", "vostfr"}},
+        }
+    )
+
+    print(search_url)
