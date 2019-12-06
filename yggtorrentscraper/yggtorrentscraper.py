@@ -442,7 +442,22 @@ def create_search_url(parameters):
                                                     field["values"]
                                                 ):
                                                     if searched_value == value:
-                                                        fields_index.append(index)
+                                                        formated_search_url += (
+                                                            "&option_"
+                                                        )
+                                                        formated_search_url += field[
+                                                            "name"
+                                                        ]
+                                                        # fields_index.append(index)
+                                                        if "multiple" in field:
+                                                            formated_search_url += (
+                                                                "%3AMultiple"
+                                                            )
+
+                                                        formated_search_url += "[]="
+                                                        formated_search_url += str(
+                                                            index
+                                                        )
 
     formated_search_url += YGGTORRENT_SEARCH_URL_DO
     formated_search_url += "search"
@@ -450,23 +465,20 @@ def create_search_url(parameters):
     return formated_search_url
 
 
-"""
-https://www2.yggtorrent.ws/engine/search?name=walking+dead&description=&file=&uploader=&category=2145&sub_category=2184&do=search
-https://www2.yggtorrent.ws/engine/search?name=walking+dead&description=&file=&uploader=&category=2145&sub_category=2178&option_langue%3Amultiple[]=1&do=search
-https://www2.yggtorrent.ws/engine/search?name=walking+dead&description=&file=&uploader=&category=2145&sub_category=2178&option_langue%3Amultiple[]=2&do=search
-https://www2.yggtorrent.ws/engine/search?name=walking+dead&description=&file=&uploader=&category=2145&sub_category=2178&option_langue%3Amultiple[]=1&option_langue%3Amultiple[]=2&do=search
-
-"""
 if __name__ == "__main__":
     scraper = YggTorrentScraper(requests.session())
 
-    search_url = create_search_url(
-        {
-            "name": "walking dead",
-            "category": "films_&_videos",
-            "subcategory": "animation",
-            "fields": {"langue": {"anglais", "vostfr"}},
-        }
-    )
+    parameters = {
+        "name": "walking dead",
+        "category": "films_&_videos",
+        "subcategory": "serie_tv",
+        "fields": {"langue": {"anglais", "vostfr"}},
+    }
+
+    search_url = create_search_url(parameters)
 
     print(search_url)
+
+    torrents_url = scraper.search(parameters)
+
+    print(torrents_url)

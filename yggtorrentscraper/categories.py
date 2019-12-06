@@ -10,6 +10,7 @@ categories = [
                     {
                         "name": "langue",
                         "id": "29",
+                        "multiple": "1",
                         "values": [
                             "anglais",
                             "francais_(vff/truefrench)",
@@ -53,6 +54,7 @@ categories = [
                     {
                         "name": "systeme",
                         "id": "31",
+                        "multiple": "1",
                         "values": [
                             "nintendo_ds/3ds",
                             "pc/platine/lecteur_multimedia/etc",
@@ -72,6 +74,7 @@ categories = [
                     {
                         "name": "genre",
                         "id": "33",
+                        "multiple": "1",
                         "values": [
                             "action",
                             "animalier",
@@ -248,6 +251,7 @@ categories = [
                     {
                         "name": "langue",
                         "id": "29",
+                        "multiple": "1",
                         "values": [
                             "anglais",
                             "francais_(vff/truefrench)",
@@ -291,6 +295,7 @@ categories = [
                     {
                         "name": "systeme",
                         "id": "31",
+                        "multiple": "1",
                         "values": [
                             "nintendo_ds/3ds",
                             "pc/platine/lecteur_multimedia/etc",
@@ -310,6 +315,7 @@ categories = [
                     {
                         "name": "genre",
                         "id": "33",
+                        "multiple": "1",
                         "values": [
                             "action",
                             "animalier",
@@ -379,6 +385,7 @@ categories = [
                     {
                         "name": "langue",
                         "id": "29",
+                        "multiple": "1",
                         "values": [
                             "anglais",
                             "francais_(vff/truefrench)",
@@ -422,6 +429,7 @@ categories = [
                     {
                         "name": "systeme",
                         "id": "31",
+                        "multiple": "1",
                         "values": [
                             "nintendo_ds/3ds",
                             "pc/platine/lecteur_multimedia/etc",
@@ -447,6 +455,7 @@ categories = [
                     {
                         "name": "langue",
                         "id": "29",
+                        "multiple": "1",
                         "values": [
                             "anglais",
                             "francais_(vff/truefrench)",
@@ -490,6 +499,7 @@ categories = [
                     {
                         "name": "systeme",
                         "id": "31",
+                        "multiple": "1",
                         "values": [
                             "nintendo_ds/3ds",
                             "pc/platine/lecteur_multimedia/etc",
@@ -509,6 +519,7 @@ categories = [
                     {
                         "name": "genre",
                         "id": "33",
+                        "multiple": "1",
                         "values": [
                             "action",
                             "animalier",
@@ -685,6 +696,7 @@ categories = [
                     {
                         "name": "langue",
                         "id": "29",
+                        "multiple": "1",
                         "values": [
                             "anglais",
                             "francais_(vff/truefrench)",
@@ -728,6 +740,7 @@ categories = [
                     {
                         "name": "systeme",
                         "id": "31",
+                        "multiple": "1",
                         "values": [
                             "nintendo_ds/3ds",
                             "pc/platine/lecteur_multimedia/etc",
@@ -747,6 +760,7 @@ categories = [
                     {
                         "name": "genre",
                         "id": "33",
+                        "multiple": "1",
                         "values": [
                             "action",
                             "animalier",
@@ -816,6 +830,7 @@ categories = [
                     {
                         "name": "langue",
                         "id": "29",
+                        "multiple": "1",
                         "values": [
                             "anglais",
                             "francais_(vff/truefrench)",
@@ -859,6 +874,7 @@ categories = [
                     {
                         "name": "systeme",
                         "id": "31",
+                        "multiple": "1",
                         "values": [
                             "nintendo_ds/3ds",
                             "pc/platine/lecteur_multimedia/etc",
@@ -878,6 +894,7 @@ categories = [
                     {
                         "name": "genre",
                         "id": "33",
+                        "multiple": "1",
                         "values": [
                             "action",
                             "animalier",
@@ -1054,6 +1071,7 @@ categories = [
                     {
                         "name": "langue",
                         "id": "29",
+                        "multiple": "1",
                         "values": [
                             "anglais",
                             "francais_(vff/truefrench)",
@@ -1097,6 +1115,7 @@ categories = [
                     {
                         "name": "systeme",
                         "id": "31",
+                        "multiple": "1",
                         "values": [
                             "nintendo_ds/3ds",
                             "pc/platine/lecteur_multimedia/etc",
@@ -1116,6 +1135,7 @@ categories = [
                     {
                         "name": "genre",
                         "id": "33",
+                        "multiple": "1",
                         "values": [
                             "action",
                             "animalier",
@@ -1185,6 +1205,7 @@ categories = [
                     {
                         "name": "langue",
                         "id": "29",
+                        "multiple": "1",
                         "values": [
                             "anglais",
                             "francais_(vff/truefrench)",
@@ -1228,6 +1249,7 @@ categories = [
                     {
                         "name": "systeme",
                         "id": "31",
+                        "multiple": "1",
                         "values": [
                             "nintendo_ds/3ds",
                             "pc/platine/lecteur_multimedia/etc",
@@ -1247,6 +1269,7 @@ categories = [
                     {
                         "name": "genre",
                         "id": "33",
+                        "multiple": "1",
                         "values": [
                             "action",
                             "animalier",
@@ -1316,6 +1339,7 @@ categories = [
                     {
                         "name": "langue",
                         "id": "29",
+                        "multiple": "1",
                         "values": [
                             "anglais",
                             "francais_(vff/truefrench)",
@@ -1359,6 +1383,7 @@ categories = [
                     {
                         "name": "systeme",
                         "id": "31",
+                        "multiple": "1",
                         "values": [
                             "nintendo_ds/3ds",
                             "pc/platine/lecteur_multimedia/etc",
@@ -1384,6 +1409,7 @@ categories = [
                     {
                         "name": "langue",
                         "id": "29",
+                        "multiple": "1",
                         "values": [
                             "anglais",
                             "francais_(vff/truefrench)",
@@ -1427,6 +1453,7 @@ categories = [
                     {
                         "name": "systeme",
                         "id": "31",
+                        "multiple": "1",
                         "values": [
                             "nintendo_ds/3ds",
                             "pc/platine/lecteur_multimedia/etc",
@@ -1506,6 +1533,7 @@ categories = [
                     {
                         "name": "genre",
                         "id": "17",
+                        "multiple": "1",
                         "values": [
                             "actualites",
                             "animaux",
@@ -1616,6 +1644,7 @@ categories = [
                     {
                         "name": "genre",
                         "id": "20",
+                        "multiple": "1",
                         "values": [
                             "actualites",
                             "animaux",
@@ -1726,6 +1755,7 @@ categories = [
                     {
                         "name": "genre",
                         "id": "20",
+                        "multiple": "1",
                         "values": [
                             "actualites",
                             "animaux",
@@ -1836,6 +1866,7 @@ categories = [
                     {
                         "name": "genre",
                         "id": "20",
+                        "multiple": "1",
                         "values": [
                             "actualites",
                             "animaux",
@@ -1946,6 +1977,7 @@ categories = [
                     {
                         "name": "genre",
                         "id": "20",
+                        "multiple": "1",
                         "values": [
                             "actualites",
                             "animaux",
@@ -2056,6 +2088,7 @@ categories = [
                     {
                         "name": "genre",
                         "id": "20",
+                        "multiple": "1",
                         "values": [
                             "actualites",
                             "animaux",
@@ -2186,6 +2219,7 @@ categories = [
                     {
                         "name": "genre",
                         "id": "9",
+                        "multiple": "1",
                         "values": [
                             "acid_house",
                             "acid_jazz",
@@ -2352,6 +2386,7 @@ categories = [
                     {
                         "name": "genre",
                         "id": "13",
+                        "multiple": "1",
                         "values": [
                             "humour",
                             "litteraire",
@@ -2395,6 +2430,7 @@ categories = [
                     {
                         "name": "genre",
                         "id": "11",
+                        "multiple": "1",
                         "values": [
                             "acid_house",
                             "acid_jazz",
@@ -2544,6 +2580,7 @@ categories = [
                     {
                         "name": "genre",
                         "id": "28",
+                        "multiple": "1",
                         "values": [
                             "accessibilite",
                             "administration",
@@ -2640,6 +2677,7 @@ categories = [
                     {
                         "name": "genre",
                         "id": "28",
+                        "multiple": "1",
                         "values": [
                             "accessibilite",
                             "administration",
@@ -2736,6 +2774,7 @@ categories = [
                     {
                         "name": "genre",
                         "id": "28",
+                        "multiple": "1",
                         "values": [
                             "accessibilite",
                             "administration",
@@ -2832,6 +2871,7 @@ categories = [
                     {
                         "name": "genre",
                         "id": "28",
+                        "multiple": "1",
                         "values": [
                             "accessibilite",
                             "administration",
@@ -2928,6 +2968,7 @@ categories = [
                     {
                         "name": "genre",
                         "id": "28",
+                        "multiple": "1",
                         "values": [
                             "accessibilite",
                             "administration",
@@ -3039,6 +3080,7 @@ categories = [
                     {
                         "name": "genre",
                         "id": "28",
+                        "multiple": "1",
                         "values": [
                             "accessibilite",
                             "administration",
@@ -3150,6 +3192,7 @@ categories = [
                     {
                         "name": "genre",
                         "id": "28",
+                        "multiple": "1",
                         "values": [
                             "accessibilite",
                             "administration",
@@ -3262,6 +3305,7 @@ categories = [
                     {
                         "name": "genre",
                         "id": "22",
+                        "multiple": "1",
                         "values": [
                             "action",
                             "aventure",
@@ -3320,6 +3364,7 @@ categories = [
                     {
                         "name": "genre",
                         "id": "22",
+                        "multiple": "1",
                         "values": [
                             "action",
                             "aventure",
@@ -3378,6 +3423,7 @@ categories = [
                     {
                         "name": "genre",
                         "id": "22",
+                        "multiple": "1",
                         "values": [
                             "action",
                             "aventure",
@@ -3441,6 +3487,7 @@ categories = [
                     {
                         "name": "genre",
                         "id": "22",
+                        "multiple": "1",
                         "values": [
                             "action",
                             "aventure",
@@ -3504,6 +3551,7 @@ categories = [
                     {
                         "name": "genre",
                         "id": "22",
+                        "multiple": "1",
                         "values": [
                             "action",
                             "aventure",
@@ -3577,6 +3625,7 @@ categories = [
                     {
                         "name": "genre",
                         "id": "22",
+                        "multiple": "1",
                         "values": [
                             "action",
                             "aventure",
@@ -3647,6 +3696,7 @@ categories = [
                     {
                         "name": "genre",
                         "id": "22",
+                        "multiple": "1",
                         "values": [
                             "action",
                             "aventure",
@@ -3720,6 +3770,7 @@ categories = [
                     {
                         "name": "genre",
                         "id": "22",
+                        "multiple": "1",
                         "values": [
                             "action",
                             "aventure",
@@ -3778,6 +3829,7 @@ categories = [
                     {
                         "name": "genre",
                         "id": "22",
+                        "multiple": "1",
                         "values": [
                             "action",
                             "aventure",
