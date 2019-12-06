@@ -123,7 +123,7 @@ torrents_url = scraper.search({"name": "blue oyster cult", "sort": "completed", 
 
 #### Search by category, subcategory and options_index
 
-**Complete categories tree is available in file categories.py**
+**Complete categories tree is available in file [categories.py](https://github.com/Harkame/YggTorrentScraper/blob/master/yggtorrentscraper/categories.py)**
 
 ``` python
 
