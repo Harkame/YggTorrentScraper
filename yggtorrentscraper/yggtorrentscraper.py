@@ -6,8 +6,8 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
-from torrent import Torrent, TorrentComment, TorrentFile
-from categories import categories
+from .torrent import Torrent, TorrentComment, TorrentFile
+from .categories import categories
 
 YGGTORRENT_TLD = "ws"
 
