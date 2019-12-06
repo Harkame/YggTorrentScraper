@@ -376,14 +376,6 @@ def create_search_url(parameters):
     if "name" in parameters:
         formated_search_url += parameters["name"]
 
-    if "category" in parameters:
-        formated_search_url += YGGTORRENT_SEARCH_URL_CATEGORY
-        formated_search_url += parameters["category"]
-
-    if "sub_category" in parameters:
-        formated_search_url += YGGTORRENT_SEARCH_URL_SUB_CATEGORY
-        formated_search_url += parameters["sub_category"]
-
     if "page" in parameters:
         formated_search_url += YGGTORRENT_SEARCH_URL_PAGE
         formated_search_url += str(parameters["page"])
@@ -451,12 +443,12 @@ def create_search_url(parameters):
                                                         # fields_index.append(index)
                                                         if "multiple" in field:
                                                             formated_search_url += (
-                                                                "%3AMultiple"
+                                                                "%3Amultiple"
                                                             )
 
                                                         formated_search_url += "[]="
                                                         formated_search_url += str(
-                                                            index
+                                                            index + 1
                                                         )
 
     formated_search_url += YGGTORRENT_SEARCH_URL_DO
@@ -482,3 +474,6 @@ if __name__ == "__main__":
     torrents_url = scraper.search(parameters)
 
     print(torrents_url)
+
+# https://www2.yggtorrent.ws/engine/search?name=walking+dead&description=&file=&uploader=&category=2145&sub_category=2184&option_langue%3Amultiple[]=1&option_langue%3Amultiple[]=8&do=search
+# https://www2.yggtorrent.ws/engine/search?name=walking+dead&description=&file=&uploader=&category=2145&sub_category=2184&option_langue%3AMultiple[]=1&option_langue%3AMultiple[]=8&do=search
