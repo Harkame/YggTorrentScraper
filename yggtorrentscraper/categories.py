@@ -6,7 +6,7 @@ categories = [
             {
                 "name": "animation",
                 "id": "2178",
-                "fields": [
+                "options": [
                     {
                         "name": "langue",
                         "id": "29",
@@ -140,7 +140,7 @@ categories = [
             {
                 "name": "animation_serie",
                 "id": "2179",
-                "fields": [
+                "options": [
                     {
                         "name": "episode",
                         "id": "34",
@@ -381,7 +381,7 @@ categories = [
             {
                 "name": "concert",
                 "id": "2180",
-                "fields": [
+                "options": [
                     {
                         "name": "langue",
                         "id": "29",
@@ -451,7 +451,7 @@ categories = [
             {
                 "name": "documentaire",
                 "id": "2181",
-                "fields": [
+                "options": [
                     {
                         "name": "langue",
                         "id": "29",
@@ -585,7 +585,7 @@ categories = [
             {
                 "name": "emission_tv",
                 "id": "2182",
-                "fields": [
+                "options": [
                     {
                         "name": "episode",
                         "id": "34",
@@ -826,7 +826,7 @@ categories = [
             {
                 "name": "film",
                 "id": "2183",
-                "fields": [
+                "options": [
                     {
                         "name": "langue",
                         "id": "29",
@@ -960,7 +960,7 @@ categories = [
             {
                 "name": "serie_tv",
                 "id": "2184",
-                "fields": [
+                "options": [
                     {
                         "name": "episode",
                         "id": "34",
@@ -1201,7 +1201,7 @@ categories = [
             {
                 "name": "spectacle",
                 "id": "2185",
-                "fields": [
+                "options": [
                     {
                         "name": "langue",
                         "id": "29",
@@ -1335,7 +1335,7 @@ categories = [
             {
                 "name": "sport",
                 "id": "2186",
-                "fields": [
+                "options": [
                     {
                         "name": "langue",
                         "id": "29",
@@ -1405,7 +1405,7 @@ categories = [
             {
                 "name": "video-clips",
                 "id": "2187",
-                "fields": [
+                "options": [
                     {
                         "name": "langue",
                         "id": "29",
@@ -1481,7 +1481,7 @@ categories = [
             {
                 "name": "audio",
                 "id": "2151",
-                "fields": [
+                "options": [
                     {
                         "name": "format",
                         "id": "14",
@@ -1610,7 +1610,7 @@ categories = [
             {
                 "name": "bds",
                 "id": "2152",
-                "fields": [
+                "options": [
                     {
                         "name": "format",
                         "id": "18",
@@ -1721,7 +1721,7 @@ categories = [
             {
                 "name": "comics",
                 "id": "2153",
-                "fields": [
+                "options": [
                     {
                         "name": "format",
                         "id": "18",
@@ -1832,7 +1832,7 @@ categories = [
             {
                 "name": "livres",
                 "id": "2154",
-                "fields": [
+                "options": [
                     {
                         "name": "format",
                         "id": "18",
@@ -1943,7 +1943,7 @@ categories = [
             {
                 "name": "manga",
                 "id": "2155",
-                "fields": [
+                "options": [
                     {
                         "name": "format",
                         "id": "18",
@@ -2054,7 +2054,7 @@ categories = [
             {
                 "name": "presse",
                 "id": "2156",
-                "fields": [
+                "options": [
                     {
                         "name": "format",
                         "id": "18",
@@ -2168,11 +2168,11 @@ categories = [
         "name": "audio",
         "id": "2139",
         "subcategories": [
-            {"name": "karaoke", "id": "2147", "fields": []},
+            {"name": "karaoke", "id": "2147", "options": []},
             {
                 "name": "musique",
                 "id": "2148",
-                "fields": [
+                "options": [
                     {
                         "name": "format",
                         "id": "6",
@@ -2359,7 +2359,7 @@ categories = [
             {
                 "name": "podcast_radio",
                 "id": "2150",
-                "fields": [
+                "options": [
                     {
                         "name": "format",
                         "id": "12",
@@ -2403,7 +2403,7 @@ categories = [
             {
                 "name": "samples",
                 "id": "2149",
-                "fields": [
+                "options": [
                     {
                         "name": "format",
                         "id": "10",
@@ -2576,7 +2576,7 @@ categories = [
             {
                 "name": "autre",
                 "id": "2177",
-                "fields": [
+                "options": [
                     {
                         "name": "genre",
                         "id": "28",
@@ -2673,7 +2673,7 @@ categories = [
             {
                 "name": "formation",
                 "id": "2176",
-                "fields": [
+                "options": [
                     {
                         "name": "genre",
                         "id": "28",
@@ -2770,7 +2770,7 @@ categories = [
             {
                 "name": "linux",
                 "id": "2171",
-                "fields": [
+                "options": [
                     {
                         "name": "genre",
                         "id": "28",
@@ -2867,7 +2867,7 @@ categories = [
             {
                 "name": "macos",
                 "id": "2172",
-                "fields": [
+                "options": [
                     {
                         "name": "genre",
                         "id": "28",
@@ -2964,7 +2964,7 @@ categories = [
             {
                 "name": "smartphone",
                 "id": "2174",
-                "fields": [
+                "options": [
                     {
                         "name": "genre",
                         "id": "28",
@@ -3076,7 +3076,7 @@ categories = [
             {
                 "name": "tablette",
                 "id": "2175",
-                "fields": [
+                "options": [
                     {
                         "name": "genre",
                         "id": "28",
@@ -3188,7 +3188,7 @@ categories = [
             {
                 "name": "windows",
                 "id": "2173",
-                "fields": [
+                "options": [
                     {
                         "name": "genre",
                         "id": "28",
@@ -3291,7 +3291,7 @@ categories = [
             {
                 "name": "autre",
                 "id": "2167",
-                "fields": [
+                "options": [
                     {
                         "name": "langue",
                         "id": "16",
@@ -3350,7 +3350,7 @@ categories = [
             {
                 "name": "linux",
                 "id": "2159",
-                "fields": [
+                "options": [
                     {
                         "name": "langue",
                         "id": "16",
@@ -3409,7 +3409,7 @@ categories = [
             {
                 "name": "macos",
                 "id": "2160",
-                "fields": [
+                "options": [
                     {
                         "name": "langue",
                         "id": "16",
@@ -3468,7 +3468,7 @@ categories = [
             {
                 "name": "microsoft",
                 "id": "2162",
-                "fields": [
+                "options": [
                     {
                         "name": "console",
                         "id": "23",
@@ -3532,7 +3532,7 @@ categories = [
             {
                 "name": "nintendo",
                 "id": "2163",
-                "fields": [
+                "options": [
                     {
                         "name": "console",
                         "id": "24",
@@ -3596,7 +3596,7 @@ categories = [
             {
                 "name": "smartphone",
                 "id": "2165",
-                "fields": [
+                "options": [
                     {
                         "name": "langue",
                         "id": "16",
@@ -3670,7 +3670,7 @@ categories = [
             {
                 "name": "sony",
                 "id": "2164",
-                "fields": [
+                "options": [
                     {
                         "name": "console",
                         "id": "25",
@@ -3741,7 +3741,7 @@ categories = [
             {
                 "name": "tablette",
                 "id": "2166",
-                "fields": [
+                "options": [
                     {
                         "name": "langue",
                         "id": "16",
@@ -3815,7 +3815,7 @@ categories = [
             {
                 "name": "windows",
                 "id": "2161",
-                "fields": [
+                "options": [
                     {
                         "name": "langue",
                         "id": "16",
@@ -3877,17 +3877,17 @@ categories = [
         "name": "emulation",
         "id": "2141",
         "subcategories": [
-            {"name": "emulateur", "id": "2157", "fields": []},
-            {"name": "rom/iso", "id": "2158", "fields": []},
+            {"name": "emulateur", "id": "2157", "options": []},
+            {"name": "rom/iso", "id": "2158", "options": []},
         ],
     },
     {
         "name": "gps",
         "id": "2143",
         "subcategories": [
-            {"name": "applications", "id": "2168", "fields": []},
-            {"name": "cartes", "id": "2169", "fields": []},
-            {"name": "divers", "id": "2170", "fields": []},
+            {"name": "applications", "id": "2168", "options": []},
+            {"name": "cartes", "id": "2169", "options": []},
+            {"name": "divers", "id": "2170", "options": []},
         ],
     },
 ]

@@ -51,10 +51,9 @@ YggTorrent TLD is change regularly, you can specify it at YggTorrentScraper cons
 
 ``` python
 
-import requests
-from yggtorrentscraper import YggTorrentScraper
+from yggtorrentscraper import set_yggtorrent_tld
 
-scraper = YggTorrentScraper(requests.session(), yggtorrent_tld="new_tld")
+set_yggtorrent_tld("new_tld")
 
 ```
 
@@ -81,7 +80,7 @@ Return url's results torrent for specified search
 
 ``` python
 
-research = scraper.search({name : "walking dead s08"})
+torrents_url = scraper.search({name : "walking dead s08"})
 
 """
 
@@ -103,7 +102,7 @@ Return url's results torrent for specified search
 
 ``` python
 
-research = scraper.search({name : "walking dead s09", "uploader" : 'brandit'})
+torrents_url = scraper.search({name : "walking dead s09", "uploader" : 'brandit'})
 
 ```
 
@@ -118,7 +117,29 @@ Return url's results torrent for specified search
 
 ``` python
 
-research = scraper.search({"name": "blue oyster cult", "sort": "completed", "order": "desc"})
+torrents_url = scraper.search({"name": "blue oyster cult", "sort": "completed", "order": "desc"})
+
+```
+
+#### Search by category, subcategory and options_index
+
+**Complete categories tree is available in file categories.py**
+
+``` python
+
+parameters = {
+    "name": "walking dead",
+    "category": "films_&_videos",
+    "subcategory": "serie_tv",
+    "options": {
+        "langue": {"francais_(vff/truefrench)"},
+        "episode": {"saison_complete"},
+        "qualite": {"bluray_[full]"},
+    },
+}
+
+
+research = scraper.search(parameters)
 
 ```
 

@@ -17,18 +17,12 @@ class TestAuthentification(unittest.TestCase):
         self.assertTrue(yggtorrent_identifiant is not None)
         self.assertTrue(yggtorrent_password is not None)
 
-        is_authentified = self.scraper.login(
-            yggtorrent_identifiant, yggtorrent_password
-        )
-
-        self.assertTrue(is_authentified)
+        self.assertTrue(self.scraper.login(yggtorrent_identifiant, yggtorrent_password))
 
         self.scraper.logout()
 
     def test_login_failed(self):
-        is_authentified = self.scraper.login("myidentifiant", "mypassword")
-
-        self.assertFalse(is_authentified)
+        self.assertFalse(self.scraper.login("myidentifiant", "mypassword"))
 
         self.scraper.logout()
 

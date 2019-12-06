@@ -1,24 +1,26 @@
 import unittest
 
-from ..yggtorrentscraper import YggTorrentScraper, YGGTORRENT_TLD, change_yggtorrent_tld
+from ..yggtorrentscraper import (
+    YggTorrentScraper,
+    set_yggtorrent_tld,
+    get_yggtorrent_tld,
+)
 
 
 class TestChangeYggtorrentTLD(unittest.TestCase):
-    current_yggtorrent_tld = None
+    current_yggtorrent_tld = get_yggtorrent_tld()
 
     def test_read_tld(self):
-        self.current_yggtorrent_tld = YGGTORRENT_TLD
+        self.current_yggtorrent_tld = get_yggtorrent_tld()
 
-        self.assertTrue(self.current_yggtorrent_tld == "pe")
+        self.assertTrue(self.current_yggtorrent_tld == "ws")
 
-    def test_change_yggtorrent_tld(self):
-        # TODO Fix this test
-        """
-        change_yggtorrent_tld("newtld")
+    def test_set_yggtorrent_tld(self):
 
-        self.assertTrue(YGGTORRENT_TLD == "newtld")
-        """
+        set_yggtorrent_tld("newtld")
+
+        self.assertTrue(get_yggtorrent_tld() == "newtld")
         pass
 
     def tearDown(self):
-        change_yggtorrent_tld(self.current_yggtorrent_tld)
+        set_yggtorrent_tld(self.current_yggtorrent_tld)

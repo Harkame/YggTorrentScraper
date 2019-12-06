@@ -2,7 +2,6 @@ import datetime
 import logging
 import os
 import re
-import sys
 
 import requests
 from bs4 import BeautifulSoup
@@ -54,7 +53,7 @@ TORRENT_PER_PAGE = 50
 YGGTORRENT_FILES_URL = f"{YGGTORRENT_BASE_URL}/engine/get_files?torrent="
 
 
-def change_yggtorrent_tld(yggtorrent_tld=None):
+def set_yggtorrent_tld(yggtorrent_tld=None):
     """
     Redefine all string variable according to new TLD
     """
@@ -88,6 +87,10 @@ def change_yggtorrent_tld(yggtorrent_tld=None):
     YGGTORRENT_FILES_URL = f"{YGGTORRENT_BASE_URL}/engine/get_files?torrent="
 
 
+def get_yggtorrent_tld():
+    return YGGTORRENT_TLD
+
+
 class YggTorrentScraper:
     session = None
 
@@ -105,7 +108,7 @@ class YggTorrentScraper:
             "User-Agent": "PostmanRuntime/7.17.1",
             "Accept": "*/*",
             "Cache-Control": "no-cache",
-            "Host": f"www5.yggtorrent.{YGGTORRENT_TLD}",
+            "Host": f"www.yggtorrent.{YGGTORRENT_TLD}",
             "Accept-Encoding": "gzip, deflate",
             "Connection": "keep-alive",
         }
@@ -374,7 +377,7 @@ def create_search_url(parameters):
     formated_search_url = YGGTORRENT_SEARCH_URL
 
     if "name" in parameters:
-        formated_search_url += parameters["name"]
+        formated_search_url += parameters["name"].replace(" ", "+")
 
     if "page" in parameters:
         formated_search_url += YGGTORRENT_SEARCH_URL_PAGE
@@ -406,14 +409,6 @@ def create_search_url(parameters):
         formated_search_url += YGGTORRENT_SEARCH_URL_ORDER
         formated_search_url += parameters["order"]
 
-        id_category = "all"
-        id_subcategory = "all"
-        fields_index = []
-
-    id_category = ""
-    id_subcategory = ""
-    fields_index = []
-
     if "category" in parameters:
         for category in categories:
             if parameters["category"] == category["name"]:
@@ -425,23 +420,23 @@ def create_search_url(parameters):
                         if parameters["subcategory"] == subcategory["name"]:
                             formated_search_url += YGGTORRENT_SEARCH_URL_SUB_CATEGORY
                             formated_search_url += subcategory["id"]
-                            if "fields" in parameters:
-                                for key, values in parameters["fields"].items():
-                                    for field in subcategory["fields"]:
-                                        if key == field["name"]:
+                            if "options" in parameters:
+                                for key, values in parameters["options"].items():
+                                    for option in subcategory["options"]:
+                                        if key == option["name"]:
                                             for searched_value in values:
                                                 for index, value in enumerate(
-                                                    field["values"]
+                                                    option["values"]
                                                 ):
                                                     if searched_value == value:
                                                         formated_search_url += (
                                                             "&option_"
                                                         )
-                                                        formated_search_url += field[
+                                                        formated_search_url += option[
                                                             "name"
                                                         ]
-                                                        # fields_index.append(index)
-                                                        if "multiple" in field:
+                                                        # options_index.append(index)
+                                                        if "multiple" in option:
                                                             formated_search_url += (
                                                                 "%3Amultiple"
                                                             )
@@ -455,25 +450,3 @@ def create_search_url(parameters):
     formated_search_url += "search"
 
     return formated_search_url
-
-
-if __name__ == "__main__":
-    scraper = YggTorrentScraper(requests.session())
-
-    parameters = {
-        "name": "walking dead",
-        "category": "films_&_videos",
-        "subcategory": "serie_tv",
-        "fields": {"langue": {"anglais", "vostfr"}},
-    }
-
-    search_url = create_search_url(parameters)
-
-    print(search_url)
-
-    torrents_url = scraper.search(parameters)
-
-    print(torrents_url)
-
-# https://www2.yggtorrent.ws/engine/search?name=walking+dead&description=&file=&uploader=&category=2145&sub_category=2184&option_langue%3Amultiple[]=1&option_langue%3Amultiple[]=8&do=search
-# https://www2.yggtorrent.ws/engine/search?name=walking+dead&description=&file=&uploader=&category=2145&sub_category=2184&option_langue%3AMultiple[]=1&option_langue%3AMultiple[]=8&do=search

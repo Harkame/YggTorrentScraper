@@ -62,7 +62,7 @@ class TestResearch(unittest.TestCase):
                 torrent_old = torrent
 
     def test_search_multiple_page(self):
-        torrents_url = self.scraper.search({"name": "walking dead"})
+        torrents_url = self.scraper.search({"name": "fear the walking dead"})
 
         self.assertTrue(len(torrents_url) > 200)
 
