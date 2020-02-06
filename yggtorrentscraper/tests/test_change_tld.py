@@ -13,7 +13,7 @@ class TestChangeYggtorrentTLD(unittest.TestCase):
     def test_read_tld(self):
         self.current_yggtorrent_tld = get_yggtorrent_tld()
 
-        self.assertTrue(self.current_yggtorrent_tld == "ws")
+        self.assertTrue(self.current_yggtorrent_tld == "se")
 
     def test_set_yggtorrent_tld(self):
 
