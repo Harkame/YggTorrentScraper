@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 from .torrent import Torrent, TorrentComment, TorrentFile
 from .categories import categories
 
-YGGTORRENT_TLD = "ws"
+YGGTORRENT_TLD = "se"
 
 YGGTORRENT_BASE_URL = f"https://www2.yggtorrent.{YGGTORRENT_TLD}"
 
