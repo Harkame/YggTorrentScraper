@@ -1,0 +1,4 @@
+BeautifulSoup4
+lxml
+requests
+requests_toolbelt
