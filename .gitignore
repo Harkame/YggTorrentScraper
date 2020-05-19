@@ -1,0 +1,14 @@
+torrents/
+__pycache__/
+.tox
+yggtorrentdownloader.egg-info/
+.coverage
+.pytest_cache
+coverage.xml
+build/
+dist/
+*.pyc
+*.torrent
+torrents/
+yggtorrentscraper.egg-info
+.log
