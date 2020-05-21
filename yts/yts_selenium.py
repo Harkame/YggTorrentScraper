@@ -31,7 +31,7 @@ YGGTORRENT_TLD = "se"
 YGGTORRENT_BASE_URL = f"https://www2.yggtorrent.{YGGTORRENT_TLD}"
 
 YGGTORRENT_LOGIN_URL = f"{YGGTORRENT_BASE_URL}/user/login"
-YGGTORRENT_LOGOUT_URL = f"{YGGTORRENT_BASE_URL}/user/logout?attempt=1"
+YGGTORRENT_LOGOUT_URL = f"{YGGTORRENT_BASE_URL}/user/logout"
 
 YGGTORRENT_SEARCH_URL = f"{YGGTORRENT_BASE_URL}/engine/search?name="
 
@@ -109,9 +109,18 @@ def get_yggtorrent_tld():
 
 
 class YggTorrentScraperSelenium:
-    def __init__(self, driver=None):
-        self.session = None
-        self.driver = driver
+    def __init__(self, driver=None, driver_path=None):
+
+        if driver_path is not None:
+            options = webdriver.ChromeOptions()
+            options.add_argument("--log-level=3")
+            options.add_argument("--disable-blink-features")
+            options.add_argument("--disable-blink-features=AutomationControlled")
+            options.add_experimental_option("excludeSwitches", ["enable-logging"])
+
+            self.driver = webdriver.Chrome("D:\chromedriver.exe", options=options)
+        else:
+            self.driver = driver
 
     def login(self, identifiant, password):
         self.driver.get(YGGTORRENT_BASE_URL)
@@ -137,23 +146,45 @@ class YggTorrentScraperSelenium:
 
         self.driver.execute_script("arguments[0].click();", login_button)
 
+        time.sleep(1)
+
+        account_banned = self.driver.find_element_by_css_selector("#ban_msg_login")
+        invalid_password = self.driver.find_element_by_css_selector("#login_msg_pass")
+        not_activated_account = self.driver.find_element_by_css_selector(
+            "#login_msg_mail"
+        )
+
+        if (
+            len(account_banned.get_attribute("style")) == 0
+            or len(invalid_password.get_attribute("style")) == 0
+            or len(not_activated_account.get_attribute("style")) == 0
+        ):
+            return False
+
+        try:
+            WebDriverWait(self.driver, 5).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, "#panel-btn"))
+            )
+        except selenium.common.exceptions.TimeoutException:
+            return False
+
+        return True
+
     def logout(self):
         """
         Logout request
         """
-        response = self.session.get(YGGTORRENT_LOGOUT_URL)
 
-        self.session.cookies.clear()
+        # <a href="https://www2.yggtorrent.se/user/logout"> Déconnexion</a>
+        self.driver.get(YGGTORRENT_LOGOUT_URL)
 
-        logger.debug("status_code : %s", response.status_code)
+        time.sleep(1)
 
-        if response.status_code == 200:
-            logger.debug("Logout successful")
+        panel_button = self.driver.find_element_by_css_selector("#panel-btn")
 
+        if panel_button is None:
             return True
         else:
-            logger.debug("Logout failed")
-
             return False
 
     def search(self, parameters):
@@ -176,8 +207,6 @@ class YggTorrentScraperSelenium:
         )
 
         torrents = []
-
-        # response = self.session.get(torrent_url)
 
         torrent_page = BeautifulSoup(self.driver.page_source, features="lxml")
 
@@ -240,8 +269,6 @@ class YggTorrentScraperSelenium:
         torrent_id = torrent_page.find("form", {"id": "report-torrent"}).find(
             "input", {"type": "hidden", "name": "target"}
         )["value"]
-
-        # response = self.session.get(YGGTORRENT_GET_FILES + torrent_id)
 
         self.driver.get(torrent_url)
 
@@ -455,24 +482,3 @@ def create_search_url(parameters):
     formated_search_url += "search"
 
     return formated_search_url
-
-
-if __name__ == "__main__":
-    options = webdriver.ChromeOptions()
-    options.add_argument("--log-level=3")
-    options.add_argument("--disable-blink-features")
-    options.add_argument("--disable-blink-features=AutomationControlled")
-    options.add_argument("window-size=1080,1920")
-    # ptions.add_argument("headless")
-    options.add_experimental_option("excludeSwitches", ["enable-logging"])
-
-    driver = webdriver.Chrome("D:\chromedriver.exe", options=options)
-
-    scraper = YggTorrentScraperSelenium(driver=driver)
-
-    if scraper.login("harkame573", "Palavas34250"):
-        print("Login success")
-        torrents_url = scraper.most_completed()
-        print(torrents_url)
-    else:
-        print("Login failed")

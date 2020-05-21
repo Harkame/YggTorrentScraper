@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="yggtorrentscraper",
-    version="1.2.8",
+    version="1.2.9",
     author="Harkame",
     description="Scraper for YggTorrent",
     long_description=long_description,
