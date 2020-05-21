@@ -6,6 +6,8 @@
 [![Build Status](https://travis-ci.org/Harkame/YggTorrentScraper.svg?branch=master)](https://travis-ci.org/Harkame/YggTorrentScraper)
 [![codecov](https://codecov.io/gh/Harkame/YggTorrentScraper/branch/master/graph/badge.svg)](https://codecov.io/gh/Harkame/YggTorrentScraper)
 
+For now, only Selenium version is working
+
 ## Installation
 
 ``` bash
