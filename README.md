@@ -115,7 +115,7 @@ Return url's results torrent for specified search
 
 ``` python
 
-torrents_url = scraper.search({name : "walking dead s08"})
+torrents_url = scraper.search({"name" : "walking dead s08"})
 
 """
 
