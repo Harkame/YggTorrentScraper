@@ -31,6 +31,8 @@ python setup.py install
 -   [BeautifulSoup 4](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
 -   [lxml](https://github.com/lxml/lxml.git)
 -   [requests](https://github.com/psf/requests.git)
+-   [Google Chrome](https://www.google.com/chrome/)
+-   [ChromeDriver](https://chromedriver.chromium.org)
 
 ## Usage
 
