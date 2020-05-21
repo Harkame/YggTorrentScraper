@@ -6,14 +6,8 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
-
-if __package__ is None or __package__ == "":
-    from torrent import Torrent, TorrentComment, TorrentFile
-    from categories import categories
-
-else:
-    from .torrent import Torrent, TorrentComment, TorrentFile
-    from .categories import categories
+from .torrent import Torrent, TorrentComment, TorrentFile
+from .categories import categories
 
 
 import sys
@@ -23,6 +17,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
 
 from random import randint
 
@@ -110,7 +105,6 @@ def get_yggtorrent_tld():
 
 class YggTorrentScraperSelenium:
     def __init__(self, driver=None, driver_path=None):
-
         if driver_path is not None:
             options = webdriver.ChromeOptions()
             options.add_argument("--log-level=3")
@@ -118,7 +112,7 @@ class YggTorrentScraperSelenium:
             options.add_argument("--disable-blink-features=AutomationControlled")
             options.add_experimental_option("excludeSwitches", ["enable-logging"])
 
-            self.driver = webdriver.Chrome("D:\chromedriver.exe", options=options)
+            self.driver = webdriver.Chrome(driver_path, options=options)
         else:
             self.driver = driver
 
@@ -165,7 +159,7 @@ class YggTorrentScraperSelenium:
             WebDriverWait(self.driver, 5).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, "#panel-btn"))
             )
-        except selenium.common.exceptions.TimeoutException:
+        except TimeoutException:
             return False
 
         return True
@@ -180,12 +174,12 @@ class YggTorrentScraperSelenium:
 
         time.sleep(1)
 
-        panel_button = self.driver.find_element_by_css_selector("#panel-btn")
-
-        if panel_button is None:
+        try:
+            panel_button = self.driver.find_element_by_css_selector("#panel-btn")
+        except NoSuchElementException:
             return True
-        else:
-            return False
+
+        return False
 
     def search(self, parameters):
         search_url = create_search_url(parameters)
@@ -333,8 +327,6 @@ class YggTorrentScraperSelenium:
 
             a_element = a_elements[1]
             torrents_url.append(a_element["href"])
-
-        driver.quit()
 
         return torrents_url
 

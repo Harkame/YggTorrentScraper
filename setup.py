@@ -5,13 +5,18 @@ with open("README.md", "r") as fh:
 
 setup(
     name="yggtorrentscraper",
-    version="1.2.9",
+    version="1.2.12",
     author="Harkame",
     description="Scraper for YggTorrent",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/Harkame/YggTorrentDownloader",
-    install_requires=["BeautifulSoup4 >= 4.8.1", "lxml >= 4.4.1", "requests >= 2.22.0"],
+    install_requires=[
+        "BeautifulSoup4 >= 4.8.1",
+        "lxml >= 4.4.1",
+        "requests >= 2.22.0",
+        "selenium==3.141.0",
+    ],
     classifiers=[
         "Programming Language :: Python",
         "License :: OSI Approved",
