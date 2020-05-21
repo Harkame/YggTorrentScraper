@@ -58,6 +58,28 @@ scraper = YggTorrentScraper(session)
 
 ```
 
+Selenium version
+
+``` python
+from yggtorrentscraper import YggTorrentScraperSelenium
+from selenium import webdriver
+
+
+options = webdriver.ChromeOptions()
+options.add_argument("--log-level=3")
+options.add_argument("--disable-blink-features")
+options.add_argument("--disable-blink-features=AutomationControlled")
+options.add_experimental_option("excludeSwitches", ["enable-logging"])
+
+driver = webdriver.Chrome("D:\chromedriver.exe", options=options)
+
+scraper = YggTorrentScraperSelenium(driver=driver)
+
+#OR
+
+scraper = YggTorrentScraperSelenium(driver_path="D:\chromedriver.exe")
+
+```
 #### Change TLD
 
 YggTorrent TLD is change regularly, you can specify it at YggTorrentScraper construction with optionnal parameters yggtorrent_tld
