@@ -6,8 +6,6 @@
 [![Build Status](https://travis-ci.org/Harkame/YggTorrentScraper.svg?branch=master)](https://travis-ci.org/Harkame/YggTorrentScraper)
 [![codecov](https://codecov.io/gh/Harkame/YggTorrentScraper/branch/master/graph/badge.svg)](https://codecov.io/gh/Harkame/YggTorrentScraper)
 
-For now, only Selenium version is working
-
 ## Installation
 
 ``` bash
@@ -40,9 +38,7 @@ python setup.py install
 
 ### Initialization
 
-Actual cloudflare bypassers like https://github.com/VeNoMouS/cloudscraper seem to have some difficulties for now.
-
-The easiest solution is to set « cf_clearance » cookie manually, you can find it in your browser.
+Actual cloudflare bypassers like https://github.com/VeNoMouS/cloudscraper seem to have some difficulties for now. Only Selenium version is working.
 
 
 ``` python
