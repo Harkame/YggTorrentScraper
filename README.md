@@ -50,13 +50,7 @@ The easiest solution is to set « cf_clearance » cookie manually, you can find 
 import requests
 from yggtorrentscraper import YggTorrentScraper
 
-cookie = requests.cookies.create_cookie(
-    name="cf_clearance",
-    value="1b23f59d619777532aea667960d00269fc49517e-1589279876-0-150",
-)
 session = requests.session()
-
-session.cookies.set_cookie(cookie)
 
 scraper = YggTorrentScraper(session)
 
