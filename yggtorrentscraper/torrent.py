@@ -18,6 +18,7 @@ class Torrent:
     leechers = -1
 
     url = None
+    download_url = None
 
     files = []
     comments = []
@@ -33,6 +34,11 @@ class Torrent:
 
         if self.url is not None:
             to_string += self.url
+        else:
+            to_string += "N/A"
+
+        if self.download_url is not None:
+            to_string += self.download_url
         else:
             to_string += "N/A"
 

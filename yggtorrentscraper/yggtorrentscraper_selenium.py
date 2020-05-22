@@ -6,8 +6,9 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
-from torrent import Torrent, TorrentComment, TorrentFile
-from categories import categories
+from .torrent import Torrent, TorrentComment, TorrentFile
+from .categories import categories
+
 
 import sys
 import time
@@ -16,6 +17,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
 
 from random import randint
 
@@ -24,7 +26,7 @@ YGGTORRENT_TLD = "se"
 YGGTORRENT_BASE_URL = f"https://www2.yggtorrent.{YGGTORRENT_TLD}"
 
 YGGTORRENT_LOGIN_URL = f"{YGGTORRENT_BASE_URL}/user/login"
-YGGTORRENT_LOGOUT_URL = f"{YGGTORRENT_BASE_URL}/user/logout?attempt=1"
+YGGTORRENT_LOGOUT_URL = f"{YGGTORRENT_BASE_URL}/user/logout"
 
 YGGTORRENT_SEARCH_URL = f"{YGGTORRENT_BASE_URL}/engine/search?name="
 
@@ -102,9 +104,17 @@ def get_yggtorrent_tld():
 
 
 class YggTorrentScraperSelenium:
-    def __init__(self, driver=None):
-        self.session = None
-        self.driver = driver
+    def __init__(self, driver=None, driver_path=None):
+        if driver_path is not None:
+            options = webdriver.ChromeOptions()
+            options.add_argument("--log-level=3")
+            options.add_argument("--disable-blink-features")
+            options.add_argument("--disable-blink-features=AutomationControlled")
+            options.add_experimental_option("excludeSwitches", ["enable-logging"])
+
+            self.driver = webdriver.Chrome(driver_path, options=options)
+        else:
+            self.driver = driver
 
     def login(self, identifiant, password):
         self.driver.get(YGGTORRENT_BASE_URL)
@@ -130,24 +140,46 @@ class YggTorrentScraperSelenium:
 
         self.driver.execute_script("arguments[0].click();", login_button)
 
+        time.sleep(1)
+
+        account_banned = self.driver.find_element_by_css_selector("#ban_msg_login")
+        invalid_password = self.driver.find_element_by_css_selector("#login_msg_pass")
+        not_activated_account = self.driver.find_element_by_css_selector(
+            "#login_msg_mail"
+        )
+
+        if (
+            len(account_banned.get_attribute("style")) == 0
+            or len(invalid_password.get_attribute("style")) == 0
+            or len(not_activated_account.get_attribute("style")) == 0
+        ):
+            return False
+
+        try:
+            WebDriverWait(self.driver, 5).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, "#panel-btn"))
+            )
+        except TimeoutException:
+            return False
+
+        return True
+
     def logout(self):
         """
         Logout request
         """
-        response = self.session.get(YGGTORRENT_LOGOUT_URL)
 
-        self.session.cookies.clear()
+        # <a href="https://www2.yggtorrent.se/user/logout"> Déconnexion</a>
+        self.driver.get(YGGTORRENT_LOGOUT_URL)
 
-        logger.debug("status_code : %s", response.status_code)
+        time.sleep(1)
 
-        if response.status_code == 200:
-            logger.debug("Logout successful")
-
+        try:
+            panel_button = self.driver.find_element_by_css_selector("#panel-btn")
+        except NoSuchElementException:
             return True
-        else:
-            logger.debug("Logout failed")
 
-            return False
+        return False
 
     def search(self, parameters):
         search_url = create_search_url(parameters)
@@ -170,11 +202,10 @@ class YggTorrentScraperSelenium:
 
         torrents = []
 
-        # response = self.session.get(torrent_url)
-
         torrent_page = BeautifulSoup(self.driver.page_source, features="lxml")
 
         torrent = Torrent()
+        torrent.url = torrent_url
 
         term_tags = torrent_page.find_all("a", {"class": "term"})
 
@@ -194,7 +225,7 @@ class YggTorrentScraperSelenium:
         download_button = torrent_page.find("a", {"class": "butt"})
 
         if download_button.has_attr("href"):
-            torrent.url = download_button["href"]
+            torrent.download_url = download_button["href"]
 
         torrent.seeders = int(connection_tags[0].text.replace(" ", ""))
         torrent.leechers = int(connection_tags[1].text.replace(" ", ""))
@@ -232,8 +263,6 @@ class YggTorrentScraperSelenium:
         torrent_id = torrent_page.find("form", {"id": "report-torrent"}).find(
             "input", {"type": "hidden", "name": "target"}
         )["value"]
-
-        # response = self.session.get(YGGTORRENT_GET_FILES + torrent_id)
 
         self.driver.get(torrent_url)
 
@@ -299,8 +328,6 @@ class YggTorrentScraperSelenium:
             a_element = a_elements[1]
             torrents_url.append(a_element["href"])
 
-        driver.quit()
-
         return torrents_url
 
     def get_torrents_url(self, search_url, parameters):
@@ -361,47 +388,9 @@ class YggTorrentScraperSelenium:
 
             self.driver.execute_script("arguments[0].click();", download_button)
 
-    def download_from_torrent_download_url(
-        self, torrent_url=None, destination_path="./"
-    ):
-        if torrent_url is None:
-            raise Exception("Invalid torrent_url, make sure you are logged")
-
-        cookies = driver.get_cookies()
-
-        self.session = requests.Session()
-        for cookie in cookies:
-            self.session.cookies.set(cookie["name"], cookie["value"])
-
-        headers = {
-            "User-Agent": "PostmanRuntime/7.17.1",
-            "Accept": "*/*",
-            "Cache-Control": "no-cache",
-            "Host": f"www.yggtorrent.{YGGTORRENT_TLD}",
-            "Accept-Encoding": "gzip, deflate",
-            "Connection": "keep-alive",
-        }
-
-        response = self.session.get(torrent_url, headers=headers)
-
-        print(response.status_code)
-
-        temp_file_name = response.headers.get("content-disposition")
-
-        file_name = temp_file_name[temp_file_name.index("filename=") + 10 : -1]
-
-        if not os.path.exists(destination_path):
-            os.makedirs(destination_path)
-
-        file_full_path = os.path.join(destination_path, file_name)
-
-        file = open(file_full_path, "wb")
-
-        file.write(response.content)
-
-        file.close()
-
-        return file_full_path
+    def download_from_torrent(self, torrent=None, destination_path="./"):
+        if torrent is not None:
+            self.download_from_torrent_url(torrent.url)
 
 
 def create_search_url(parameters):
@@ -485,36 +474,3 @@ def create_search_url(parameters):
     formated_search_url += "search"
 
     return formated_search_url
-
-
-if __name__ == "__main__":
-    options = webdriver.ChromeOptions()
-    options.add_argument("--log-level=3")
-    options.add_argument("--disable-blink-features")
-    options.add_argument("--disable-blink-features=AutomationControlled")
-    # options.add_argument("headless")
-    options.add_experimental_option("excludeSwitches", ["enable-logging"])
-
-    driver = webdriver.Chrome("D:\chromedriver.exe", options=options)
-
-    scraper = YggTorrentScraperSelenium(driver=driver)
-    scraper.login("harkame573", "Palavas34250")
-    # print(scraper.most_completed())
-
-    # print(scraper.search({"name": "walking dead"}))
-    """
-    scraper.download_from_torrent_url(
-        "https://www2.yggtorrent.se/torrent/ebook/livres/301724-robert+kirkman+jay+bonansinga+-+the+walking+dead+-+tome+8+retour+à+woodbury+epub"
-    )
-    """
-    scraper.download_from_torrent_download_url(
-        "https://www2.yggtorrent.se/engine/download_torrent?id=301724", "./"
-    )
-
-    """
-    torrent = scraper.extract_details(
-        "https://www2.yggtorrent.se/torrent/ebook/livres/301724-robert+kirkman+jay+bonansinga+-+the+walking+dead+-+tome+8+retour+à+woodbury+epub"
-    )
-
-    print(torrent)
-    """

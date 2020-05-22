@@ -31,14 +31,14 @@ python setup.py install
 -   [BeautifulSoup 4](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
 -   [lxml](https://github.com/lxml/lxml.git)
 -   [requests](https://github.com/psf/requests.git)
+-   [Google Chrome](https://www.google.com/chrome/)
+-   [ChromeDriver](https://chromedriver.chromium.org)
 
 ## Usage
 
 ### Initialization
 
-Actual cloudflare bypassers like https://github.com/VeNoMouS/cloudscraper seem to have some difficulties for now.
-
-The easiest solution is to set « cf_clearance » cookie manually, you can find it in your browser.
+Actual cloudflare bypassers like https://github.com/VeNoMouS/cloudscraper seem to have some difficulties for now. Only Selenium version is working.
 
 
 ``` python
@@ -46,18 +46,34 @@ The easiest solution is to set « cf_clearance » cookie manually, you can find 
 import requests
 from yggtorrentscraper import YggTorrentScraper
 
-cookie = requests.cookies.create_cookie(
-    name="cf_clearance",
-    value="1b23f59d619777532aea667960d00269fc49517e-1589279876-0-150",
-)
 session = requests.session()
-
-session.cookies.set_cookie(cookie)
 
 scraper = YggTorrentScraper(session)
 
 ```
 
+Selenium version
+
+``` python
+from yggtorrentscraper import YggTorrentScraperSelenium
+from selenium import webdriver
+
+
+options = webdriver.ChromeOptions()
+options.add_argument("--log-level=3")
+options.add_argument("--disable-blink-features")
+options.add_argument("--disable-blink-features=AutomationControlled")
+options.add_experimental_option("excludeSwitches", ["enable-logging"])
+
+driver = webdriver.Chrome("D:\chromedriver.exe", options=options)
+
+scraper = YggTorrentScraperSelenium(driver=driver)
+
+#OR
+
+scraper = YggTorrentScraperSelenium(driver_path="D:\chromedriver.exe")
+
+```
 #### Change TLD
 
 YggTorrent TLD is change regularly, you can specify it at YggTorrentScraper construction with optionnal parameters yggtorrent_tld
@@ -93,7 +109,7 @@ Return url's results torrent for specified search
 
 ``` python
 
-torrents_url = scraper.search({name : "walking dead s08"})
+torrents_url = scraper.search({"name" : "walking dead s08"})
 
 """
 

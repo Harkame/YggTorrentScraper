@@ -11,3 +11,4 @@ dist/
 *.torrent
 torrents/
 yggtorrentscraper.egg-info
+.log
