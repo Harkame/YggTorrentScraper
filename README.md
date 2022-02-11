@@ -33,6 +33,7 @@ python setup.py install
 -   [requests](https://github.com/psf/requests.git)
 -   [Google Chrome](https://www.google.com/chrome/)
 -   [ChromeDriver](https://chromedriver.chromium.org)
+-   [undetected_chromedriver](https://pypi.org/project/undetected-chromedriver/)
 
 ## Usage
 
@@ -57,15 +58,14 @@ Selenium version
 ``` python
 from yggtorrentscraper import YggTorrentScraperSelenium
 from selenium import webdriver
-
+import undetected_chromedriver.v2 as uc
 
 options = webdriver.ChromeOptions()
 options.add_argument("--log-level=3")
 options.add_argument("--disable-blink-features")
 options.add_argument("--disable-blink-features=AutomationControlled")
-options.add_experimental_option("excludeSwitches", ["enable-logging"])
 
-driver = webdriver.Chrome("D:\chromedriver.exe", options=options)
+driver = uc.Chrome("D:\chromedriver.exe", options=options)
 
 scraper = YggTorrentScraperSelenium(driver=driver)
 
