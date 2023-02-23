@@ -9,9 +9,9 @@ from bs4 import BeautifulSoup
 from .torrent import Torrent, TorrentComment, TorrentFile
 from .categories import categories
 
-YGGTORRENT_TLD = "se"
+YGGTORRENT_TLD = "lol"
 
-YGGTORRENT_BASE_URL = f"https://www2.yggtorrent.{YGGTORRENT_TLD}"
+YGGTORRENT_BASE_URL = f"https://www6.yggtorrent.{YGGTORRENT_TLD}"
 
 YGGTORRENT_LOGIN_URL = f"{YGGTORRENT_BASE_URL}/user/login"
 YGGTORRENT_LOGOUT_URL = f"{YGGTORRENT_BASE_URL}/user/logout?attempt=1"
@@ -44,7 +44,7 @@ YGGTORRENT_SEARCH_URL_DO = "&do="
 YGGTORRENT_SEARCH_URL_PAGE = "&page="
 
 YGGTORRENT_GET_FILES = f"{YGGTORRENT_BASE_URL}/engine/get_files?torrent="
-YGGTORRENT_GET_INFO = f"https://www2.yggtorrentchg/engine/get_nfo?torrent="
+YGGTORRENT_GET_INFO = f"https://www6.yggtorrentchg/engine/get_nfo?torrent="
 
 YGGTORRENT_MOST_COMPLETED_URL = f"{YGGTORRENT_BASE_URL}/engine/mostcompleted"
 
@@ -70,7 +70,7 @@ def set_yggtorrent_tld(yggtorrent_tld=None):
 
     YGGTORRENT_TLD = yggtorrent_tld
 
-    YGGTORRENT_BASE_URL = f"https://www2.yggtorrent.{YGGTORRENT_TLD}"
+    YGGTORRENT_BASE_URL = f"https://www6.yggtorrent.{YGGTORRENT_TLD}"
 
     YGGTORRENT_LOGIN_URL = f"{YGGTORRENT_BASE_URL}/user/login"
     YGGTORRENT_SEARCH_URL = f"{YGGTORRENT_BASE_URL}/user/logout"
@@ -80,7 +80,7 @@ def set_yggtorrent_tld(yggtorrent_tld=None):
     YGGTORRENT_DOMAIN = ".yggtorrent.gg"
 
     YGGTORRENT_GET_FILES = f"{YGGTORRENT_BASE_URL}/engine/get_files?torrent="
-    YGGTORRENT_GET_INFO = f"https://www2.yggtorrentchg/engine/get_nfo?torrent="
+    YGGTORRENT_GET_INFO = f"https://www6.yggtorrentchg/engine/get_nfo?torrent="
 
     YGGTORRENT_MOST_COMPLETED_URL = f"{YGGTORRENT_BASE_URL}/engine/mostcompleted"
 
