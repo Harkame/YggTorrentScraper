@@ -21,9 +21,9 @@ from selenium.common.exceptions import TimeoutException, NoSuchElementException
 
 from random import randint
 
-YGGTORRENT_TLD = "se"
+YGGTORRENT_TLD = "lol"
 
-YGGTORRENT_BASE_URL = f"https://www2.yggtorrent.{YGGTORRENT_TLD}"
+YGGTORRENT_BASE_URL = f"https://www6.yggtorrent.{YGGTORRENT_TLD}"
 
 YGGTORRENT_LOGIN_URL = f"{YGGTORRENT_BASE_URL}/user/login"
 YGGTORRENT_LOGOUT_URL = f"{YGGTORRENT_BASE_URL}/user/logout"
@@ -56,7 +56,7 @@ YGGTORRENT_SEARCH_URL_DO = "&do="
 YGGTORRENT_SEARCH_URL_PAGE = "&page="
 
 YGGTORRENT_GET_FILES = f"{YGGTORRENT_BASE_URL}/engine/get_files?torrent="
-YGGTORRENT_GET_INFO = f"https://www2.yggtorrentchg/engine/get_nfo?torrent="
+YGGTORRENT_GET_INFO = f"https://www6.yggtorrentchg/engine/get_nfo?torrent="
 
 YGGTORRENT_MOST_COMPLETED_URL = f"{YGGTORRENT_BASE_URL}/engine/mostcompleted"
 
@@ -82,7 +82,7 @@ def set_yggtorrent_tld(yggtorrent_tld=None):
 
     YGGTORRENT_TLD = yggtorrent_tld
 
-    YGGTORRENT_BASE_URL = f"https://www2.yggtorrent.{YGGTORRENT_TLD}"
+    YGGTORRENT_BASE_URL = f"https://www6.yggtorrent.{YGGTORRENT_TLD}"
 
     YGGTORRENT_LOGIN_URL = f"{YGGTORRENT_BASE_URL}/user/login"
     YGGTORRENT_SEARCH_URL = f"{YGGTORRENT_BASE_URL}/user/logout"
@@ -92,7 +92,7 @@ def set_yggtorrent_tld(yggtorrent_tld=None):
     YGGTORRENT_DOMAIN = ".yggtorrent.gg"
 
     YGGTORRENT_GET_FILES = f"{YGGTORRENT_BASE_URL}/engine/get_files?torrent="
-    YGGTORRENT_GET_INFO = f"https://www2.yggtorrentchg/engine/get_nfo?torrent="
+    YGGTORRENT_GET_INFO = f"https://www6.yggtorrentchg/engine/get_nfo?torrent="
 
     YGGTORRENT_MOST_COMPLETED_URL = f"{YGGTORRENT_BASE_URL}/engine/mostcompleted"
 
@@ -122,29 +122,29 @@ class YggTorrentScraperSelenium:
             EC.presence_of_element_located((By.CSS_SELECTOR, "#title"))
         )
 
-        register_button = self.driver.find_element_by_css_selector("#register")
+        register_button = self.driver.find_element(By.CSS_SELECTOR, "#register")
 
         self.driver.execute_script("arguments[0].click();", register_button)
 
-        input_identifiant = self.driver.find_element_by_css_selector("input[name='id']")
+        input_identifiant = self.driver.find_element(By.CSS_SELECTOR, "input[name='id']")
 
         input_identifiant.clear()
         input_identifiant.send_keys(identifiant)
 
-        input_password = self.driver.find_element_by_css_selector("input[name='pass']")
+        input_password = self.driver.find_element(By.CSS_SELECTOR, "input[name='pass']")
 
         input_password.clear()
         input_password.send_keys(password)
 
-        login_button = self.driver.find_element_by_css_selector("#user-login button")
+        login_button = self.driver.find_element(By.CSS_SELECTOR, "#user-login button")
 
         self.driver.execute_script("arguments[0].click();", login_button)
 
         time.sleep(1)
 
-        account_banned = self.driver.find_element_by_css_selector("#ban_msg_login")
-        invalid_password = self.driver.find_element_by_css_selector("#login_msg_pass")
-        not_activated_account = self.driver.find_element_by_css_selector(
+        account_banned = self.driver.find_element(By.CSS_SELECTOR, "#ban_msg_login")
+        invalid_password = self.driver.find_element(By.CSS_SELECTOR, "#login_msg_pass")
+        not_activated_account = self.driver.find_element(By.CSS_SELECTOR, 
             "#login_msg_mail"
         )
 
@@ -169,13 +169,13 @@ class YggTorrentScraperSelenium:
         Logout request
         """
 
-        # <a href="https://www2.yggtorrent.se/user/logout"> Déconnexion</a>
+        # <a href="https://www6.yggtorrent.se/user/logout"> Déconnexion</a>
         self.driver.get(YGGTORRENT_LOGOUT_URL)
 
         time.sleep(1)
 
         try:
-            panel_button = self.driver.find_element_by_css_selector("#panel-btn")
+            panel_button = self.driver.find_element(By.CSS_SELECTOR, "#panel-btn")
         except NoSuchElementException:
             return True
 
@@ -360,17 +360,10 @@ class YggTorrentScraperSelenium:
             search_url = create_search_url(parameters)
 
             self.driver.get(search_url)
-
-            WebDriverWait(self.driver, 30000).until(
-                EC.presence_of_element_located(
-                    (By.CSS_SELECTOR, "#over-18-notification")
-                )
-            )
-
             search_page = BeautifulSoup(self.driver.page_source, features="lxml")
 
             torrents_tag = search_page.findAll("a", {"id": "torrent_name"})
-
+    
             for torrent_tag in torrents_tag:
                 torrents.append(torrent_tag["href"])
 
@@ -384,7 +377,7 @@ class YggTorrentScraperSelenium:
                 EC.presence_of_element_located((By.CSS_SELECTOR, "#title"))
             )
 
-            download_button = self.driver.find_element_by_css_selector("a.butt")
+            download_button = self.driver.find_element(By.CSS_SELECTOR, "a.butt")
 
             self.driver.execute_script("arguments[0].click();", download_button)
 
